@@ -1,7 +1,7 @@
 package market_system.backtest.data;
 
 public class CandleData {
-	protected double low,high,close,open;
+	public double low,high,close,open;
 	
 	public CandleData(double open, double high, double low, double close) {
 		this.low = low;

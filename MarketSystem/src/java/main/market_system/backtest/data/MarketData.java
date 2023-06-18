@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -85,8 +86,11 @@ public class MarketData extends ArrayList<CandleData>{
 	
 	
 	public static void main(String arg[]) {
-		MarketData m = new MarketData("resources/data/EURUSDr.csv");
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		//MarketData m = new MarketData("resources/data/EURUSDr.csv");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		Duration duration = Duration.between(LocalDateTime.parse("2010-01-01 15:30:00", formatter), 
+											 LocalDateTime.parse("2011-01-02 16:31:00", formatter));
+		System.out.println(duration.toMinutes());
 		//LocalDateTime date = LocalDateTime.parse("2010-01-01", formatter);
 		/*String str = "2023-06-17 15:30:00";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

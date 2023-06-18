@@ -20,9 +20,9 @@ public class Broker {
 	List<Deal>deals;
 	IdGenerator oGens,tGens,dGens;
 	Client client;
-	double balance;
 	
 	public Broker(Client client) {
+		this.client = client;
 		this.orders = new ArrayList<>();
 		this.pendingOrders = new ArrayList<>();
 		this.trades = new ArrayList<>();
@@ -31,9 +31,7 @@ public class Broker {
 		this.oGens = new IdGenerator();
 		this.tGens = new IdGenerator();
 		this.dGens = new IdGenerator();
-		this.position = new Position();
-		this.client = client;
-		balance = client.getDeposit();
+		this.position = new Position(client.getDeposit());
 	}
 
 	public void onInit() {
@@ -52,13 +50,15 @@ public class Broker {
 		}
 		
 		//open pending orders
+		double equity = position.getEquity();
+		double auxEq = 0d;
 		for(int i=0;i<this.pendingOrders.size();i++) {
 			Order o = this.pendingOrders.get(i);
-			if(balance<o.getVolume()*candle.open) {
+			if(equity-auxEq<o.getVolume()*candle.open) {
 				System.err.println("Order couldn't be open >>> "+o.toString());
 				continue;
 			}
-			balance -= o.getVolume()*candle.open;
+			auxEq += o.getVolume()*candle.open;
 			Trade t = new Trade(tGens.getNext(), date, candle.open, o.getVolume(), o);
 			this.openTrades.add(t);
 			this.orders.add(o);

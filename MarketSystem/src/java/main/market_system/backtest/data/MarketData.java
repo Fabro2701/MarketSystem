@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -56,6 +57,7 @@ public class MarketData extends ArrayList<CandleData>{
 		}
 	}
 	
+	
 	static Properties defaultProperties;
 	static {
 		defaultProperties = new Properties();
@@ -64,6 +66,21 @@ public class MarketData extends ArrayList<CandleData>{
 		defaultProperties.put("capacity", "0");
 		//pending columns order inluding the indicators reading
 		
+	}
+	
+	/**
+	 * Fills map with the indicators at position i
+	 * @param map
+	 * @param i
+	 */
+	public void fillIndicators(Map<String, Double>map, int i) {
+		for(Entry<String, ArrayList<Double>> e:this.indicators.entrySet()) {
+			map.put(e.getKey(), e.getValue().get(i));
+		}
+	}
+	
+	public LocalDateTime getDate(int i) {
+		return this.dates.get(i);
 	}
 	
 	

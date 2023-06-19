@@ -15,17 +15,17 @@ public class Broker {
 	LocalDateTime currentDate;
 	double currentPrice;
 	Position position;
-	List<Order>orders,pendingOrders;
-	List<Trade>trades,openTrades;
+	List<Order>closedOrders,pendingOrders;
+	List<Trade>closedTrades,openTrades;
 	List<Deal>deals;
 	IdGenerator oGens,tGens,dGens;
 	Client client;
 	
 	public Broker(Client client) {
 		this.client = client;
-		this.orders = new ArrayList<>();
+		this.closedOrders = new ArrayList<>();
 		this.pendingOrders = new ArrayList<>();
-		this.trades = new ArrayList<>();
+		this.closedTrades = new ArrayList<>();
 		this.openTrades = new ArrayList<>();
 		this.deals = new ArrayList<>();
 		this.oGens = new IdGenerator();
@@ -38,7 +38,9 @@ public class Broker {
 		
 	}
 	public void onTick(LocalDateTime date, CandleData candle, Map<String, Double> indicatorsMap) {
-
+		System.out.println("Time: "+date+"  |  "+position);
+		
+		//pending.. max and min of the candle for update
 		//tp sl fixedtime ...
 		for(int i=0;i<this.openTrades.size();i++) {
 			if(this.openTrades.get(i).update(date, candle.open)) {
@@ -50,18 +52,21 @@ public class Broker {
 		}
 		
 		//open pending orders
+		double margin = position.getMargin();
 		double equity = position.getEquity();
-		double auxEq = 0d;
 		for(int i=0;i<this.pendingOrders.size();i++) {
 			Order o = this.pendingOrders.get(i);
-			if(equity-auxEq<o.getVolume()*candle.open) {
-				System.err.println("Order couldn't be open >>> "+o.toString());
+			if(margin<o.getVolume()*o.getOpenPrice()) {
+				System.err.println("Order couldn't be open >>> "+o.toString()+" Available equity: "+equity);
 				continue;
 			}
-			auxEq += o.getVolume()*candle.open;
-			Trade t = new Trade(tGens.getNext(), date, candle.open, o.getVolume(), o);
+			//trade opens at o.getOpenPrice()
+			Trade t = new Trade(tGens.getNext(), date, o.getOpenPrice(), o.getVolume(), o);
+			margin -= o.getVolume()*o.getOpenPrice();
+			position.substract(o.getVolume()*o.getOpenPrice());
 			this.openTrades.add(t);
-			this.orders.add(o);
+			this.closedOrders.add(o);
+			System.out.println("Order opened >>> "+o.toString()+" Available balance: "+equity);
 		}this.pendingOrders.clear();
 		
 		
@@ -75,10 +80,21 @@ public class Broker {
 
 	public void onEnd() {
 		//close everything...
+		for(int i=0;i<this.openTrades.size();i++) {
+			Deal deal = new Deal(dGens.getNext(), this.currentDate, this.currentPrice, this.openTrades.get(i));
+			this.deals.add(deal);
+			this.openTrades.remove(i);
+			i--;
+		}
 		
-		this.orders.clear();
-		this.trades.clear();
+		this.position.update(this.openTrades, this.deals, this.currentPrice);
+
+		this.closedTrades.clear();
+		this.closedOrders.clear();
 		this.deals.clear();
+		
+		
+		System.out.println("Final balance: "+position.getEquity());
 	}
 
 	public boolean sendOrder(ORDER_TYPE type, double volume, String comment) {

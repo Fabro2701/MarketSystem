@@ -7,7 +7,7 @@ import market_system.backtest.broker.order.Order.ORDER_TYPE;
 public class Position {
 	double volume;
 	POSITION_TYPE type;
-	double balance, margin;//profit & margin
+	double balance, margin,equity;
 	int dealsCursor;
 	
 	public Position(double balance) {
@@ -22,17 +22,15 @@ public class Position {
 	public void update(List<Trade> trades, List<Deal>deals,double close) {
 		
 		margin = 0;
+		equity = 0;
 		for(Trade trade:trades) {
 			double openPrice = trade.getOpenPrice();
 			double volume = trade.getVolume();
 			ORDER_TYPE type = trade.getType();
 			
-			if(type==ORDER_TYPE.BUY) {
-				margin += (close-openPrice)*volume;
-			}
-			else if(type==ORDER_TYPE.SELL) {
-				margin += (openPrice-close)*volume;
-			}
+			margin += Math.abs((close-openPrice)*volume);
+			if(type==ORDER_TYPE.BUY)equity += (close-openPrice)*volume;
+			else equity -= (close-openPrice)*volume;
 		}
 		
 		for(int i=dealsCursor;i<deals.size();i++) {
@@ -42,7 +40,18 @@ public class Position {
 	public double getBalance() {
 		return this.balance;
 	}
-	public double getEquity() {
+	public double getMargin() {
 		return this.balance-margin;
+	}
+	public double getEquity() {
+		return this.balance+equity;
+	}
+	public void substract(double d) {
+		this.balance -= d;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("Balance: %f Equity:%f Margin:%f", this.balance,this.equity,this.margin);
 	}
 }

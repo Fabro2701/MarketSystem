@@ -16,6 +16,6 @@ public class FixedTimeOrder extends Order {
 	
 	@Override
 	public String toString() {
-		return String.format("FixedTimeOrder %d: %s %f at %s %f %d %s", id, type, volume, openDate.toString(), openPrice, duration, comment);
+		return String.format("FixedTimeOrder %d: %s %f at %s open: %f %dmin \"%s\"", id, type, volume, openDate.toString(), openPrice, duration, comment);
 	}
 }

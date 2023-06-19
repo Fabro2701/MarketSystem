@@ -35,8 +35,8 @@ public class BackTest {
 			
 			broker.onTick(data.getDate(cursor+i), data.get(cursor+i), indicatorsMap);
 			strategy.onTick(data.getDate(cursor+i), data.get(cursor+i), indicatorsMap, broker);
-			cursor++;
 		}
+		cursor+=n;
 		//observers
 	}
 	public void run(Strategy strategy) {
@@ -58,13 +58,18 @@ public class BackTest {
 		
 		Broker broker = new Broker(new Client(2d));
 		BackTest bt = new BackTest(broker);
-		bt.setData(new MarketData("resources/data/EURUSDr.csv"));
+		bt.setData(new MarketData("resources/data/EURUSDr2.csv"));
+		bt.init();
 		
 		Strategy strat = new UserStrategy();
 		bt.step(strat, 1);
-		broker.sendFixedTimeOrder(ORDER_TYPE.BUY, 1d, 1L, null);
-		broker.sendFixedTimeOrder(ORDER_TYPE.BUY, 1d, 1L, null);
-		broker.sendFixedTimeOrder(ORDER_TYPE.BUY, 1d, 1L, null);
-		bt.step(strat, 10);
+		broker.sendFixedTimeOrder(ORDER_TYPE.BUY, 1d, 1000000L, null);
+		//broker.sendFixedTimeOrder(ORDER_TYPE.BUY, 1d, 1000000L, null);
+		//broker.sendFixedTimeOrder(ORDER_TYPE.BUY, 1d, 1000000L, null);
+		bt.step(strat, 50);
+		//broker.sendFixedTimeOrder(ORDER_TYPE.BUY, 1d, 1L, null);
+		//bt.step(strat, 2);
+		
+		bt.end();
 	}
 }

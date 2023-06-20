@@ -38,7 +38,7 @@ public class Broker {
 		
 	}
 	public void onTick(LocalDateTime date, CandleData candle, Map<String, Double> indicatorsMap) {
-		System.out.println("Time: "+date+"  |  "+position);
+		//System.out.println("Time: "+date+"  |  "+position);
 		
 		//pending.. max and min of the candle for update
 		//tp sl fixedtime ...
@@ -114,5 +114,9 @@ public class Broker {
 		Order o = new FixedTimeOrder(oGens.getNext(), type, volume, currentDate, currentPrice, duration, comment);
 		pendingOrders.add(o);
 		return true;
+	}
+
+	public Position getPosition() {
+		return position;
 	}
 }

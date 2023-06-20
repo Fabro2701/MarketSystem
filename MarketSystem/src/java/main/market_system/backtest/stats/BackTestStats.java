@@ -1,5 +1,9 @@
 package market_system.backtest.stats;
 
-public abstract class BackTestStats {
+import java.time.LocalDateTime;
 
+import market_system.backtest.broker.Broker;
+
+public abstract class BackTestStats {
+	public abstract void onTick(LocalDateTime date, Broker broker);
 }

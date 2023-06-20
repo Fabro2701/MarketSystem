@@ -1,6 +1,8 @@
 package market_system.backtest;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -8,6 +10,8 @@ import market_system.backtest.broker.Broker;
 import market_system.backtest.broker.Client;
 import market_system.backtest.broker.order.Order.ORDER_TYPE;
 import market_system.backtest.data.MarketData;
+import market_system.backtest.stats.BackTestStats;
+import market_system.backtest.stats.PositionStats;
 import market_system.backtest.strategy.Strategy;
 import market_system.backtest.strategy.UserStrategy;
 
@@ -16,11 +20,14 @@ public class BackTest {
 	private Broker broker;
 	private MarketData data;
 	private Map<String,Double>indicatorsMap;
+	private List<BackTestStats>stats;
 	
 	public BackTest(Broker broker) {
 		this.cursor = 0;
 		this.broker = broker;
 		this.indicatorsMap = new HashMap<>();
+		stats = new ArrayList<>();
+		stats.add(new PositionStats());
 	}
 	
 	public void init() {
@@ -30,14 +37,24 @@ public class BackTest {
 		Objects.requireNonNull(data, "null data");
 		
 		for(int i=0;i<n && i+cursor<data.size();i++) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			indicatorsMap.clear();
 			data.fillIndicators(indicatorsMap, cursor+i);
 			
 			broker.onTick(data.getDate(cursor+i), data.get(cursor+i), indicatorsMap);
 			strategy.onTick(data.getDate(cursor+i), data.get(cursor+i), indicatorsMap, broker);
+			
+			//observers
+			for(BackTestStats s:this.stats) {
+				s.onTick(data.getDate(cursor+i), broker);
+			}
 		}
 		cursor+=n;
-		//observers
 	}
 	public void run(Strategy strategy) {
 		this.step(strategy, data.size());
@@ -63,7 +80,7 @@ public class BackTest {
 		
 		Strategy strat = new UserStrategy();
 		bt.step(strat, 1);
-		broker.sendFixedTimeOrder(ORDER_TYPE.BUY, 1d, 1000000L, null);
+		broker.sendFixedTimeOrder(ORDER_TYPE.BUY, 1d, 24*60*20L, null);
 		//broker.sendFixedTimeOrder(ORDER_TYPE.BUY, 1d, 1000000L, null);
 		//broker.sendFixedTimeOrder(ORDER_TYPE.BUY, 1d, 1000000L, null);
 		bt.step(strat, 50);

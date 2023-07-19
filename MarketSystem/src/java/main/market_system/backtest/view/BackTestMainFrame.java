@@ -26,7 +26,7 @@ public class BackTestMainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        seriesVisualizerPanel1 = new market_system.backtest.view.SeriesVisualizerPanel();
+        seriesVisualizerPanel1 = new market_system.backtest.view.series.SeriesPlayerPanel();
         expertAgentPanel2 = new market_system.backtest.view.ExpertAgentPanel();
         backTestResultPanel2 = new market_system.backtest.view.BackTestResultPanel();
 
@@ -94,6 +94,6 @@ public class BackTestMainFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private market_system.backtest.view.BackTestResultPanel backTestResultPanel2;
     private market_system.backtest.view.ExpertAgentPanel expertAgentPanel2;
-    private market_system.backtest.view.SeriesVisualizerPanel seriesVisualizerPanel1;
+    private market_system.backtest.view.series.SeriesPlayerPanel seriesVisualizerPanel1;
     // End of variables declaration//GEN-END:variables
 }

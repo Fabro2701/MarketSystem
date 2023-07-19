@@ -48,7 +48,7 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="market_system.backtest.view.SeriesVisualizerPanel" name="seriesVisualizerPanel1">
+    <Component class="market_system.backtest.view.series.SeriesPlayerPanel" name="seriesVisualizerPanel1">
     </Component>
     <Component class="market_system.backtest.view.ExpertAgentPanel" name="expertAgentPanel2">
     </Component>

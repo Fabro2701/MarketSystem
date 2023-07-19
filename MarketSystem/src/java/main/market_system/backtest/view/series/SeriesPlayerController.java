@@ -2,12 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package market_system.backtest.view;
+package market_system.backtest.view.series;
 
 /**
  *
  * @author Fabrizio Ortega
  */
-public class SeriesVisualizerController {
+public class SeriesPlayerController {
     
 }

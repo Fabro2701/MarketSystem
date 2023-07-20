@@ -8,68 +8,49 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
-import market_system.backtest.BackTest;
-import market_system.backtest.broker.Broker;
-import market_system.backtest.broker.Client;
-import market_system.backtest.data.CandleData;
 import market_system.backtest.data.MarketData;
-import market_system.backtest.util.Util;
+import market_system.backtest.view.series.render.CandlesRenderer;
+import market_system.backtest.view.series.render.IndicatorRenderer;
+import market_system.backtest.view.series.render.LineChartRenderer;
+import market_system.backtest.view.series.render.PricesRenderer;
 
 /**
  *
  * @author Fabrizio Ortega
  */
 public class SeriesViewerPanel extends javax.swing.JPanel {
-	static double height = 466,width=1219;
+	public static double height = 466,width=1219;
 	Graphics2D g2;
 	BufferedImage bufferImage;
+	List<PricesRenderer>priceRenderers;
+	List<IndicatorRenderer>indicatorsRenderers;
 
     /**
      * Creates new form SeriesViewerPanel
      */
     public SeriesViewerPanel() {
         initComponents();
+        
+        
         bufferImage = new BufferedImage((int)width, (int)height, BufferedImage.TYPE_4BYTE_ABGR);
         g2=bufferImage.createGraphics();
         
-		MarketData md = new MarketData("resources/data/EURUSDr.csv");
-		paintRange(md,0,3);
+        priceRenderers = List.of(new CandlesRenderer(), new LineChartRenderer());
+        
+		MarketData md = new MarketData("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSDr.csv");
+		paintRange(md,0);
     }
     
-    public void paintRange(MarketData data, int ini, int end) {
-    	double max=0d,min=0d;
-    	for(int i=ini;i<end;i++) {
-    		max=Math.max(max, data.get(i).high);
-    		min=Math.min(min, data.get(i).low);
-    	}
-    	
+   
+	public void paintRange(MarketData data, int ini) {
+
 		g2.setColor(Color.WHITE);
     	g2.fillRect(0, 0, (int)width, (int)height);
-    	int i=0;
-    	for(CandleData cd:data) {
-    		double open = Util.map(cd.open,max,min)*height;
-    		double close = Util.map(cd.close,max,min)*height;
-    		double high = Util.map(cd.high,max,min)*height;
-    		double low = Util.map(cd.low,max,min)*height;
-    		double candleBody = Math.abs(open-close);
-    		//System.out.println("candle2: "+open+" "+close);
-    		
-    		double shift = i*8d;
-    		double candleWidth = 5d;
-    		g2.setColor(Color.BLACK);
-    		g2.drawLine((int)(shift+candleWidth/2), (int)low, (int)(shift+candleWidth/2), (int)high);
-    		if(cd.close >= cd.open){//bull
-    			g2.setColor(Color.RED);
-    			g2.fillRect((int)shift, (int)(close), (int)candleWidth, (int)candleBody);
-    			
-    		}
-    		else {//bear
-    			g2.setColor(Color.RED);
-    			g2.fillRect((int)shift, (int)(open), (int)candleWidth, (int)candleBody);
-
-    		}
-    		i++;
+    	
+    	for(PricesRenderer r:this.priceRenderers) {
+    		r.update(g2, data, ini);
     	}
 
     }

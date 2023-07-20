@@ -34,7 +34,7 @@ public class BackTest {
 		broker.onInit();
 	}
 	public void step(Strategy strategy, int n) {
-		Objects.requireNonNull(data, "null data");
+		Objects.requireNonNull(data, "null data series for backtest step");
 		
 		for(int i=0;i<n && i+cursor<data.size();i++) {
 			try {

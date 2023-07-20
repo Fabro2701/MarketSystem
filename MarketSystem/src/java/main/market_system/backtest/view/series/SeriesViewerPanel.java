@@ -15,6 +15,7 @@ import market_system.backtest.view.series.render.CandlesRenderer;
 import market_system.backtest.view.series.render.IndicatorRenderer;
 import market_system.backtest.view.series.render.LineChartRenderer;
 import market_system.backtest.view.series.render.PricesRenderer;
+import market_system.backtest.view.series.render.RenderConstants;
 
 /**
  *
@@ -38,6 +39,7 @@ public class SeriesViewerPanel extends javax.swing.JPanel {
         g2=bufferImage.createGraphics();
         
         priceRenderers = List.of(new CandlesRenderer(), new LineChartRenderer());
+        //priceRenderers = List.of(new CandlesRenderer());
         
 		MarketData md = new MarketData("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSDr.csv");
 		paintRange(md,0);
@@ -46,7 +48,7 @@ public class SeriesViewerPanel extends javax.swing.JPanel {
    
 	public void paintRange(MarketData data, int ini) {
 
-		g2.setColor(Color.WHITE);
+		g2.setColor(RenderConstants.backgroundColor);
     	g2.fillRect(0, 0, (int)width, (int)height);
     	
     	for(PricesRenderer r:this.priceRenderers) {

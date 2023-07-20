@@ -6,7 +6,6 @@ import java.awt.image.BufferedImage;
 import market_system.backtest.data.MarketData;
 
 public abstract class SeriesRenderer {
-	static int windowSize=20;
 	public SeriesRenderer() {
 	}
 	public abstract void update(Graphics2D g2, MarketData data, int cursor);

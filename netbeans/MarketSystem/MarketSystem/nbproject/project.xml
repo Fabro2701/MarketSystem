@@ -6,7 +6,7 @@
             <name>MarketSystem</name>
             <source-roots>
                 <root id="src.dir"/>
-                <root id="src.resources.dir"/>
+                <root id="src.resources.dir" name="resources"/>
             </source-roots>
             <test-roots/>
         </data>

@@ -50,14 +50,14 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
         setPreferredSize(new java.awt.Dimension(1500, 568));
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/left-arrow.png"))); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\left-arrow.png")); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/right-arrow.png"))); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\right-arrow.png")); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -91,7 +91,7 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/play-play.png"))); // NOI18N
+        jButton5.setIcon(new javax.swing.ImageIcon("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\play-play.png")); // NOI18N
 
         jLabel1.setText("Speed");
 
@@ -113,7 +113,7 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
 
         jButton8.setText("jButton3");
 
-        jToggleButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pause.png"))); // NOI18N
+        jToggleButton1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\pause.png")); // NOI18N
         jToggleButton1.setPreferredSize(new java.awt.Dimension(35, 35));
         jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -121,7 +121,7 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
             }
         });
 
-        jToggleButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/play.png"))); // NOI18N
+        jToggleButton2.setIcon(new javax.swing.ImageIcon("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\play.png")); // NOI18N
         jToggleButton2.setPreferredSize(new java.awt.Dimension(35, 35));
         jToggleButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -129,7 +129,7 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
             }
         });
 
-        jToggleButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bars.png"))); // NOI18N
+        jToggleButton3.setIcon(new javax.swing.ImageIcon("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\bars.png")); // NOI18N
         jToggleButton3.setPreferredSize(new java.awt.Dimension(35, 35));
         jToggleButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -137,7 +137,7 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
             }
         });
 
-        jToggleButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/line-chart.png"))); // NOI18N
+        jToggleButton4.setIcon(new javax.swing.ImageIcon("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\line-chart.png")); // NOI18N
         jToggleButton4.setPreferredSize(new java.awt.Dimension(35, 35));
         jToggleButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

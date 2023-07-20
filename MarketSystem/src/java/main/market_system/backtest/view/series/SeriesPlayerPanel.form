@@ -102,7 +102,7 @@
         <Component class="javax.swing.JButton" name="jButton1">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/left-arrow.png"/>
+              <Image iconType="2" name="C:\Users\Fabrizio Ortega\git\MarketSystem\MarketSystem\resources\left-arrow.png"/>
             </Property>
           </Properties>
           <Events>
@@ -112,7 +112,7 @@
         <Component class="javax.swing.JButton" name="jButton2">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/right-arrow.png"/>
+              <Image iconType="2" name="C:\Users\Fabrizio Ortega\git\MarketSystem\MarketSystem\resources\right-arrow.png"/>
             </Property>
           </Properties>
           <Events>
@@ -186,7 +186,7 @@
         <Component class="javax.swing.JButton" name="jButton5">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/play-play.png"/>
+              <Image iconType="2" name="C:\Users\Fabrizio Ortega\git\MarketSystem\MarketSystem\resources\play-play.png"/>
             </Property>
           </Properties>
         </Component>
@@ -228,7 +228,7 @@
         <Component class="javax.swing.JToggleButton" name="jToggleButton1">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/pause.png"/>
+              <Image iconType="2" name="C:\Users\Fabrizio Ortega\git\MarketSystem\MarketSystem\resources\pause.png"/>
             </Property>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[35, 35]"/>
@@ -241,7 +241,7 @@
         <Component class="javax.swing.JToggleButton" name="jToggleButton2">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/play.png"/>
+              <Image iconType="2" name="C:\Users\Fabrizio Ortega\git\MarketSystem\MarketSystem\resources\play.png"/>
             </Property>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[35, 35]"/>
@@ -254,7 +254,7 @@
         <Component class="javax.swing.JToggleButton" name="jToggleButton3">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/bars.png"/>
+              <Image iconType="2" name="C:\Users\Fabrizio Ortega\git\MarketSystem\MarketSystem\resources\bars.png"/>
             </Property>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[35, 35]"/>
@@ -267,7 +267,7 @@
         <Component class="javax.swing.JToggleButton" name="jToggleButton4">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/line-chart.png"/>
+              <Image iconType="2" name="C:\Users\Fabrizio Ortega\git\MarketSystem\MarketSystem\resources\line-chart.png"/>
             </Property>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[35, 35]"/>

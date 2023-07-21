@@ -71,7 +71,7 @@ public class SeriesViewerPanel extends javax.swing.JPanel {
     	for(PricesRenderer r:this.priceRenderers) {
     		r.update(g2, data, ini);
     	}
-
+ 
     }
     @Override
     public void paintComponent(Graphics g) {

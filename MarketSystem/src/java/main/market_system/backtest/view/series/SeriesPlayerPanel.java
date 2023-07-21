@@ -345,7 +345,7 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
 
     public void updateCursor(int c){
         
-        cursorField.setText(String.valueOf(c));
+        cursorField.setText(String.valueOf(c)); 
         
         var ls = navigatorSlider.getChangeListeners();
         navigatorSlider.removeChangeListener(ls[0]);

@@ -4,6 +4,7 @@
  */
 package market_system.backtest.view.series;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -54,6 +55,18 @@ public class SeriesViewerPanel extends javax.swing.JPanel {
 
 		g2.setColor(RenderConstants.backgroundColor);
     	g2.fillRect(0, 0, (int)width, (int)height);
+    	
+
+		g2.setColor(new Color(128, 128, 128, 80));
+		g2.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
+									 0, new float[]{5}, 0));
+		for(int i=0;i<RenderConstants.windowSize/3;i++) {
+			g2.drawLine((int)(i*RenderConstants.tickShift*3), 0, 
+					    (int)(i*RenderConstants.tickShift*3), (int)height);
+
+			g2.drawLine(0, (int)(i*50), 
+					   (int)width, (int)(i*50));
+		}
     	
     	for(PricesRenderer r:this.priceRenderers) {
     		r.update(g2, data, ini);

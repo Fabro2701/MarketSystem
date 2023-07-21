@@ -1,5 +1,6 @@
 package market_system.backtest.view.series.render;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
@@ -20,6 +21,7 @@ public class CandlesRenderer extends PricesRenderer{
     		min=Math.min(min, data.get(i).low);
     	}
     	
+    	g2.setStroke(new BasicStroke(1));
     	for(int i=cursor;i-cursor<RenderConstants.windowSize && i<data.size();i++) {
     		CandleData cd=data.get(i);
     		double open = Util.map(cd.open,max,min)*SeriesViewerPanel.height;

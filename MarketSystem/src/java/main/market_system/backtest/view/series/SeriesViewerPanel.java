@@ -34,6 +34,9 @@ public class SeriesViewerPanel extends javax.swing.JPanel {
     /**
      * Creates new form SeriesViewerPanel
      */
+    public SeriesViewerPanel() {
+        initComponents();
+    }
     public SeriesViewerPanel(SeriesPlayerController ctrl) {
         initComponents();
         
@@ -75,8 +78,12 @@ public class SeriesViewerPanel extends javax.swing.JPanel {
     }
     @Override
     public void paintComponent(Graphics g) {
-        paintRange(ctrl.getData(),ctrl.getCursor());
-    	g.drawImage(bufferImage, 0, 0, null);
+        super.paintComponent(g);
+        if(ctrl!=null){
+            paintRange(ctrl.getData(),ctrl.getCursor());
+            g.drawImage(bufferImage, 0, 0, null);
+        }
+        
     }
 
     /**

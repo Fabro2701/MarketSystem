@@ -26,7 +26,7 @@ public class SeriesViewerPanel extends javax.swing.JPanel {
 	public static double height = 466,width=1219;
 	Graphics2D g2;
 	BufferedImage bufferImage;
-	List<PricesRenderer>priceRenderers;
+	PricesRenderer candlePriceRenderer,lineChartPriceRenderer;
 	List<IndicatorRenderer>indicatorsRenderers;
         
         SeriesPlayerController ctrl;
@@ -45,8 +45,8 @@ public class SeriesViewerPanel extends javax.swing.JPanel {
         bufferImage = new BufferedImage((int)width, (int)height, BufferedImage.TYPE_4BYTE_ABGR);
         g2=bufferImage.createGraphics();
         
-        priceRenderers = List.of(new CandlesRenderer(), new LineChartRenderer());
-        //priceRenderers = List.of(new CandlesRenderer());
+        candlePriceRenderer = new CandlesRenderer();
+        lineChartPriceRenderer = new LineChartRenderer();
         
 		
 	
@@ -71,9 +71,8 @@ public class SeriesViewerPanel extends javax.swing.JPanel {
 					   (int)width, (int)(i*50));
 		}
     	
-    	for(PricesRenderer r:this.priceRenderers) {
-    		r.update(g2, data, ini);
-    	}
+		if(ctrl.isCandleVisu())candlePriceRenderer.update(g2, data, ini);
+		if(ctrl.isLinechartVisu())lineChartPriceRenderer.update(g2, data, ini);
  
     }
     @Override

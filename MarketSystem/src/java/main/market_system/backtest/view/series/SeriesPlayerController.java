@@ -16,11 +16,15 @@ public class SeriesPlayerController {
     int cursor;
     SeriesPlayerPanel playerPanel;
     MarketData md;
+    boolean candleVisu,linechartVisu;
     public SeriesPlayerController(SeriesPlayerPanel playerPanel){
         cursor=0;
+        candleVisu=true;
+        linechartVisu=false;
         this.playerPanel = playerPanel;
         md = new MarketData("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD.csv");
     }
+    
     public void shiftCursor(int change){
         setCursor(cursor + change);
     }
@@ -44,4 +48,20 @@ public class SeriesPlayerController {
     public int getDataSize(){
         return md.size();
     }
+
+	public boolean isCandleVisu() {
+		return candleVisu;
+	}
+
+	public void setCandleVisu(boolean candleVisu) {
+		this.candleVisu = candleVisu;
+	}
+
+	public boolean isLinechartVisu() {
+		return linechartVisu;
+	}
+
+	public void setLinechartVisu(boolean linechartVisu) {
+		this.linechartVisu = linechartVisu;
+	}
 }

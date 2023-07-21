@@ -14,13 +14,18 @@ import javax.swing.JSlider;
  */
 public class SeriesPlayerPanel extends javax.swing.JPanel {
     SeriesPlayerController ctrl;
+    
+    
     /**
      * Creates new form SeriesVisualizer
      */
     public SeriesPlayerPanel() {
         ctrl = new SeriesPlayerController(this);
+    
+        
         initComponents();
         
+        this.candleButton.setSelected(true);
     }
 
     /**
@@ -316,11 +321,13 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_playButtonActionPerformed
 
     private void candleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_candleButtonActionPerformed
-        // TODO add your handling code here:
+        ctrl.setCandleVisu(this.candleButton.isSelected());
+        seriesViewerPanel.repaint();
     }//GEN-LAST:event_candleButtonActionPerformed
 
     private void linechartButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linechartButtonActionPerformed
-        // TODO add your handling code here:
+    	ctrl.setLinechartVisu(this.linechartButton.isSelected());
+        seriesViewerPanel.repaint();
     }//GEN-LAST:event_linechartButtonActionPerformed
 
     private void playplayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playplayButtonActionPerformed

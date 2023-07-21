@@ -31,7 +31,7 @@ public class SeriesViewerPanel extends javax.swing.JPanel {
     /**
      * Creates new form SeriesViewerPanel
      */
-    public SeriesViewerPanel() {
+    public SeriesViewerPanel(SeriesPlayerController ctrl) {
         initComponents();
         
         

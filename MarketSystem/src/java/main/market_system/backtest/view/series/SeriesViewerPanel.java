@@ -27,6 +27,8 @@ public class SeriesViewerPanel extends javax.swing.JPanel {
 	BufferedImage bufferImage;
 	List<PricesRenderer>priceRenderers;
 	List<IndicatorRenderer>indicatorsRenderers;
+        
+        SeriesPlayerController ctrl;
 
     /**
      * Creates new form SeriesViewerPanel
@@ -34,6 +36,7 @@ public class SeriesViewerPanel extends javax.swing.JPanel {
     public SeriesViewerPanel(SeriesPlayerController ctrl) {
         initComponents();
         
+        this.ctrl= ctrl;
         
         bufferImage = new BufferedImage((int)width, (int)height, BufferedImage.TYPE_4BYTE_ABGR);
         g2=bufferImage.createGraphics();
@@ -41,9 +44,10 @@ public class SeriesViewerPanel extends javax.swing.JPanel {
         priceRenderers = List.of(new CandlesRenderer(), new LineChartRenderer());
         //priceRenderers = List.of(new CandlesRenderer());
         
-		MarketData md = new MarketData("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSDr.csv");
-		paintRange(md,0);
+		
+	
     }
+    
     
    
 	public void paintRange(MarketData data, int ini) {
@@ -58,6 +62,7 @@ public class SeriesViewerPanel extends javax.swing.JPanel {
     }
     @Override
     public void paintComponent(Graphics g) {
+        paintRange(ctrl.getData(),ctrl.getCursor());
     	g.drawImage(bufferImage, 0, 0, null);
     }
 

@@ -18,9 +18,9 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
      * Creates new form SeriesVisualizer
      */
     public SeriesPlayerPanel() {
+        ctrl = new SeriesPlayerController(this);
         initComponents();
         
-        ctrl = new SeriesPlayerController(this);
     }
 
     /**
@@ -351,6 +351,8 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
         navigatorSlider.removeChangeListener(ls[0]);
         navigatorSlider.setValue((int)Math.floor(c*100f/(ctrl.getDataSize()-1)));
         navigatorSlider.addChangeListener(ls[0]);
+        
+        seriesViewerPanel.repaint();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

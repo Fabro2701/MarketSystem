@@ -17,7 +17,7 @@ public class LineChartRenderer extends PricesRenderer{
 	@Override
 	public void update(Graphics2D g2, MarketData data, int cursor) {
 
-		double max=data.get(0).low,min=data.get(0).high;
+		double max=data.get(cursor).low,min=data.get(cursor).high;
     	for(int i=cursor;i-cursor<RenderConstants.windowSize && i<data.size();i++) {
     		max=Math.max(max, data.get(i).high);
     		min=Math.min(min, data.get(i).low);
@@ -29,8 +29,8 @@ public class LineChartRenderer extends PricesRenderer{
     		CandleData cd=data.get(i);
     		double close = Util.map(cd.close,max,min)*SeriesViewerPanel.height;
 
-    		double shift1 = (i-1)*tickShift;
-    		double shift2 = (i)*tickShift;
+    		double shift1 = ((i-cursor)-1)*tickShift;
+    		double shift2 = ((i-cursor))*tickShift;
     		g2.drawLine((int)(shift1), (int)lastclose, (int)(shift2), (int)close);
     		lastclose=(int) close;
     	}

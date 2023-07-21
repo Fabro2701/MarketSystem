@@ -19,7 +19,7 @@ public class SeriesPlayerController {
     public SeriesPlayerController(SeriesPlayerPanel playerPanel){
         cursor=0;
         this.playerPanel = playerPanel;
-        md = new MarketData("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSDr.csv");
+        md = new MarketData("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD.csv");
     }
     public void shiftCursor(int change){
         setCursor(cursor + change);

@@ -14,12 +14,8 @@ import static market_system.backtest.view.series.render.RenderConstants.tickShif
 
 public class CandlesRenderer extends PricesRenderer{
 	@Override
-	public void update(Graphics2D g2, MarketData data, int cursor){
-		double max=data.get(cursor).low,min=data.get(cursor).high;
-    	for(int i=cursor;i-cursor<RenderConstants.windowSize && i<data.size();i++) {
-    		max=Math.max(max, data.get(i).high);
-    		min=Math.min(min, data.get(i).low);
-    	}
+	public void update(Graphics2D g2, MarketData data, int cursor, double max, double min){
+		
     	
     	g2.setStroke(new BasicStroke(1));
     	for(int i=cursor;i-cursor<RenderConstants.windowSize && i<data.size();i++) {

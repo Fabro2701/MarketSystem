@@ -8,6 +8,6 @@ import market_system.backtest.data.CandleData;
 
 public abstract class Strategy {
 
-	public abstract void onTick(LocalDateTime date, CandleData candleData, Map<String, Double> indicators, Broker broker);
+	public abstract void onTick(int idx, LocalDateTime date, CandleData candleData, Map<String, Double> indicators, Broker broker);
 
 }

@@ -6,6 +6,8 @@ package market_system.backtest.view.series;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+
+import market_system.backtest.broker.Broker;
 import market_system.backtest.data.MarketData;
 
 /**
@@ -17,6 +19,7 @@ public class SeriesPlayerController {
     SeriesPlayerPanel playerPanel;
     MarketData md;
     boolean candleVisu,linechartVisu;
+	private Broker broker;
     public SeriesPlayerController(SeriesPlayerPanel playerPanel){
         cursor=0;
         candleVisu=true;
@@ -68,5 +71,13 @@ public class SeriesPlayerController {
 
 	public void setLinechartVisu(boolean linechartVisu) {
 		this.linechartVisu = linechartVisu;
+	}
+
+	public void setBroker(Broker broker) {
+		this.broker = broker;
+	}
+
+	public Broker getBroker() {
+		return broker;
 	}
 }

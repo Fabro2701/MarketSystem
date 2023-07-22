@@ -14,6 +14,7 @@ import market_system.backtest.data.CandleData;
 public class Broker {
 	LocalDateTime currentDate;
 	double currentPrice;
+	int currentIdx;
 	Position position;
 	List<Order>closedOrders,pendingOrders;
 	List<Trade>closedTrades,openTrades;
@@ -37,7 +38,7 @@ public class Broker {
 	public void onInit() {
 		
 	}
-	public void onTick(LocalDateTime date, CandleData candle, Map<String, Double> indicatorsMap) {
+	public void onTick(int idx, LocalDateTime date, CandleData candle, Map<String, Double> indicatorsMap) {
 		//System.out.println("Time: "+date+"  |  "+position);
 		
 		//pending.. max and min of the candle for update
@@ -45,7 +46,7 @@ public class Broker {
 		for(int i=0;i<this.openTrades.size();i++) {
 			if(this.openTrades.get(i).update(date, candle.open)) {
 				
-				Deal deal = this.closeTrade(this.openTrades.get(i), date, candle.open);
+				this.closeTrade(idx, this.openTrades.get(i), date, candle.open);
 				
 				this.openTrades.remove(i);
 				i--;
@@ -62,7 +63,7 @@ public class Broker {
 				continue;
 			}
 			//trade opens at o.getOpenPrice()
-			Trade t = new Trade(tGens.getNext(), date, o.getOpenPrice(), o.getVolume(), o);
+			Trade t = new Trade(tGens.getNext(), idx, date, o.getOpenPrice(), o.getVolume(), o);
 			position.substractFromBalance(o.getVolume()*o.getOpenPrice());
 			this.openTrades.add(t);
 			this.closedOrders.add(o);
@@ -75,13 +76,14 @@ public class Broker {
 		
 		currentDate = date;
 		currentPrice = candle.close;
+		currentIdx = idx;
 	}
 	
 
 	public void onEnd() {
 		//close everything...
 		for(int i=0;i<this.openTrades.size();i++) {
-			Deal deal = closeTrade(this.openTrades.get(i),this.currentDate,this.currentPrice);
+			closeTrade(currentIdx, this.openTrades.get(i),this.currentDate,this.currentPrice);
 			this.openTrades.remove(i);
 			i--;
 		}
@@ -95,13 +97,12 @@ public class Broker {
 		
 		System.out.println("Final balance: "+position.getEquity());
 	}
-	private Deal closeTrade(Trade trade, LocalDateTime date, double price) {
-		Deal deal = new Deal(dGens.getNext(), date, price, trade);
+	private void closeTrade(int idx, Trade trade, LocalDateTime date, double price) {
+		Deal deal = new Deal(dGens.getNext(), idx, date, price, trade);
 		System.out.printf("Trade closed at %f %s profit: %f\n", price, date.toString(),deal.profit);
 		
 		this.deals.add(deal);
 		position.addToBalance(deal.getClosePrice()*deal.getVolume());
-		return deal;
 	}
 
 	public boolean sendOrder(ORDER_TYPE type, double volume, String comment) {
@@ -125,5 +126,9 @@ public class Broker {
 
 	public Position getPosition() {
 		return position;
+	}
+
+	public List<Deal> getDeals() {
+		return deals;
 	}
 }

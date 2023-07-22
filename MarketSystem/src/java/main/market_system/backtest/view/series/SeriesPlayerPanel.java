@@ -40,6 +40,7 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
         initComponents();
         
         ctrl.setData(backtest.getData());
+        ctrl.setBroker(backtest.getBroker());
         
         this.candleButton.setSelected(true);
         this.pauseButton.setEnabled(false);

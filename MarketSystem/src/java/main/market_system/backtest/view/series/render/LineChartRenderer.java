@@ -15,13 +15,8 @@ import static market_system.backtest.view.series.render.RenderConstants.tickShif
 
 public class LineChartRenderer extends PricesRenderer{
 	@Override
-	public void update(Graphics2D g2, MarketData data, int cursor) {
+	public void update(Graphics2D g2, MarketData data, int cursor, double max, double min) {
 
-		double max=data.get(cursor).low,min=data.get(cursor).high;
-    	for(int i=cursor;i-cursor<RenderConstants.windowSize && i<data.size();i++) {
-    		max=Math.max(max, data.get(i).high);
-    		min=Math.min(min, data.get(i).low);
-    	}
 		g2.setColor(RenderConstants.linechartColor);
 		g2.setStroke(RenderConstants.linechartStroke);
     	int lastclose = (int) (Util.map(data.get(cursor).close,max,min)*SeriesViewerPanel.height);

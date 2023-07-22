@@ -48,8 +48,8 @@ public class BackTest {
 			indicatorsMap.clear();
 			data.fillIndicators(indicatorsMap, cursor+i);
 			
-			broker.onTick(data.getDate(cursor+i), data.get(cursor+i), indicatorsMap);
-			strategy.onTick(data.getDate(cursor+i), data.get(cursor+i), indicatorsMap, broker);
+			broker.onTick(i+cursor, data.getDate(cursor+i), data.get(cursor+i), indicatorsMap);
+			strategy.onTick(i+cursor, data.getDate(cursor+i), data.get(cursor+i), indicatorsMap, broker);
 			
 			//observers
 			for(BackTestStats s:this.stats) {
@@ -83,6 +83,10 @@ public class BackTest {
             return this.cursor;
         }
 	
+	public Broker getBroker() {
+			return broker;
+		}
+
 	public static void main(String args[]) {
 		
 		Broker broker = new Broker(new Client(10d));

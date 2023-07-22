@@ -8,12 +8,13 @@ import market_system.backtest.broker.order.Order;
 import market_system.backtest.broker.order.Order.ORDER_TYPE;
 
 public class Trade {
-	int id;
+	int id,idx;
 	Order order;
 	LocalDateTime openDate;
 	double openPrice,volume;
-	public Trade(int id, LocalDateTime openDate, double currentPrice, double volume, Order order) {
+	public Trade(int id, int idx, LocalDateTime openDate, double currentPrice, double volume, Order order) {
 		this.id = id;
+		this.idx = idx;
 		this.volume = volume;
 		this.order = order;
 		this.openDate = openDate;
@@ -39,5 +40,8 @@ public class Trade {
 	}
 	public double getOpenPrice() {
 		return openPrice;
+	}
+	public int getIdx() {
+		return idx;
 	}
 }

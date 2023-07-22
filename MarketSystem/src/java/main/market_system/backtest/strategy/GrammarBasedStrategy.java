@@ -9,7 +9,7 @@ import market_system.backtest.data.CandleData;
 public class GrammarBasedStrategy extends Strategy {
 
 	@Override
-	public void onTick(LocalDateTime date, CandleData candleData, Map<String, Double> indicators, Broker broker) {
+	public void onTick(int idx, LocalDateTime date, CandleData candleData, Map<String, Double> indicators, Broker broker) {
 		// TODO Auto-generated method stub
 		
 	}

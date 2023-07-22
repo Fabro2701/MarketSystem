@@ -7,7 +7,7 @@ import market_system.backtest.data.MarketData;
 public class InsideIndicatorRenderer extends IndicatorRenderer{
 
 	@Override
-	public void update(Graphics2D g2, MarketData data, int cursor) {
+	public void update(Graphics2D g2, MarketData data, int cursor, double max, double min) {
 		// TODO Auto-generated method stub
 		
 	}

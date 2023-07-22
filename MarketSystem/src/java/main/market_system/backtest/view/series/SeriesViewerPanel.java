@@ -15,6 +15,7 @@ import market_system.backtest.data.MarketData;
 import market_system.backtest.view.series.render.CandlesRenderer;
 import market_system.backtest.view.series.render.IndicatorRenderer;
 import market_system.backtest.view.series.render.LineChartRenderer;
+import market_system.backtest.view.series.render.OperationsRenderer;
 import market_system.backtest.view.series.render.PricesRenderer;
 import market_system.backtest.view.series.render.RenderConstants;
 
@@ -28,7 +29,7 @@ public class SeriesViewerPanel extends javax.swing.JPanel {
 	BufferedImage bufferImage;
 	PricesRenderer candlePriceRenderer,lineChartPriceRenderer;
 	List<IndicatorRenderer>indicatorsRenderers;
-        
+	OperationsRenderer opRenderer;
         SeriesPlayerController ctrl;
 
     /**
@@ -48,18 +49,18 @@ public class SeriesViewerPanel extends javax.swing.JPanel {
         candlePriceRenderer = new CandlesRenderer();
         lineChartPriceRenderer = new LineChartRenderer();
         
-		
+        opRenderer = new OperationsRenderer();
 	
     }
     
     
    
 	public void paintRange(MarketData data, int ini) {
-
+		//background
 		g2.setColor(RenderConstants.backgroundColor);
     	g2.fillRect(0, 0, (int)width, (int)height);
     	
-
+    	//grid
 		g2.setColor(new Color(128, 128, 128, 80));
 		g2.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
 									 0, new float[]{5}, 0));
@@ -70,10 +71,19 @@ public class SeriesViewerPanel extends javax.swing.JPanel {
 			g2.drawLine(0, (int)(i*50), 
 					   (int)width, (int)(i*50));
 		}
+		
+		double max=data.get(ini).low,min=data.get(ini).high;
+    	for(int i=ini;i-ini<RenderConstants.windowSize && i<data.size();i++) {
+    		max=Math.max(max, data.get(i).high);
+    		min=Math.min(min, data.get(i).low);
+    	}
     	
-		if(ctrl.isCandleVisu())candlePriceRenderer.update(g2, data, ini);
-		if(ctrl.isLinechartVisu())lineChartPriceRenderer.update(g2, data, ini);
- 
+		//prices
+		if(ctrl.isCandleVisu())candlePriceRenderer.update(g2, data, ini, max, min);
+		if(ctrl.isLinechartVisu())lineChartPriceRenderer.update(g2, data, ini, max, min);
+		
+		//operations
+		opRenderer.render(g2, ctrl.getBroker(), ini, max, min);
     }
     @Override
     public void paintComponent(Graphics g) {

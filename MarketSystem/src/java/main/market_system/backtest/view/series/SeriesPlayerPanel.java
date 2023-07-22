@@ -7,25 +7,43 @@ package market_system.backtest.view.series;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JSlider;
+import javax.swing.SwingUtilities;
+import market_system.backtest.BackTest;
+import market_system.backtest.data.MarketData;
+import market_system.backtest.strategy.Strategy;
+import market_system.backtest.strategy.UserStrategy;
 
 /**
  *
  * @author Fabrizio Ortega
  */
 public class SeriesPlayerPanel extends javax.swing.JPanel {
+    BackTest backtest;
     SeriesPlayerController ctrl;
-    
-    
+    boolean simStop;
+    Strategy strategy = new UserStrategy();
     /**
      * Creates new form SeriesVisualizer
      */
     public SeriesPlayerPanel() {
-        ctrl = new SeriesPlayerController(this);
+        //ctrl = new SeriesPlayerController(this);
     
         
         initComponents();
         
         this.candleButton.setSelected(true);
+    }
+    public SeriesPlayerPanel(BackTest backtest) {
+        this.backtest = backtest;
+        ctrl = new SeriesPlayerController(this);
+        
+        initComponents();
+        
+        ctrl.setData(backtest.getData());
+        
+        this.candleButton.setSelected(true);
+        this.pauseButton.setEnabled(false);
+        simStop = true;
     }
 
     /**
@@ -42,7 +60,6 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
         leftButton = new javax.swing.JButton();
         rightButton = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        playplayButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         speedSlider = new javax.swing.JSlider();
         speedField = new javax.swing.JTextField();
@@ -52,6 +69,7 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
         jButton8 = new javax.swing.JButton();
         pauseButton = new javax.swing.JToggleButton();
         playButton = new javax.swing.JToggleButton();
+        playplayButton = new javax.swing.JButton();
         candleButton = new javax.swing.JToggleButton();
         linechartButton = new javax.swing.JToggleButton();
         jLabel3 = new javax.swing.JLabel();
@@ -111,13 +129,6 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        playplayButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\play-play.png")); // NOI18N
-        playplayButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                playplayButtonActionPerformed(evt);
-            }
-        });
-
         jLabel1.setText("Speed");
 
         speedSlider.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -157,6 +168,13 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
         playButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 playButtonActionPerformed(evt);
+            }
+        });
+
+        playplayButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\play-play.png")); // NOI18N
+        playplayButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                playplayButtonActionPerformed(evt);
             }
         });
 
@@ -313,13 +331,49 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_dateFieldActionPerformed
 
     private void pauseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseButtonActionPerformed
-        // TODO add your handling code here:
+        this.simStop = true;
+        this.playButton.setEnabled(true);
+        this.playButton.setSelected(false);
+        this.pauseButton.setEnabled(false);
+        this.pauseButton.setSelected(true);
     }//GEN-LAST:event_pauseButtonActionPerformed
 
     private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
-        // TODO add your handling code here:
+        this.simStop = false;
+        this.playButton.setEnabled(false);
+        this.playButton.setSelected(false);
+        this.pauseButton.setEnabled(true);
+        this.pauseButton.setSelected(false);
+        runEventPlay();
     }//GEN-LAST:event_playButtonActionPerformed
+      
+    public void runEventPlay() {
+    	if (!simStop && !backtest.isDone()) {
+            try {
+                    int n = Integer.parseInt(this.speedField.getText());
+                    this.backtest.step(strategy, n);
+                    this.progressBar.setValue(this.backtest.getCursor()*100/this.backtest.getData().size());
+                    if(backtest.isDone()){
+                        this.playButton.setEnabled(false);
+                        this.pauseButton.setEnabled(false);
+                        this.playplayButton.setEnabled(false);
+                        return;
+                    }
+                    this.ctrl.shiftCursor(n);
+            } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(this, e);
+                return;
+            }
+            SwingUtilities.invokeLater( new Runnable() {
+                   @Override
+                   public void run() {
+                           runEventPlay();
+                   }
+            });
+	} 
 
+    }
     private void candleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_candleButtonActionPerformed
         ctrl.setCandleVisu(this.candleButton.isSelected());
         seriesViewerPanel.repaint();
@@ -329,10 +383,6 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
     	ctrl.setLinechartVisu(this.linechartButton.isSelected());
         seriesViewerPanel.repaint();
     }//GEN-LAST:event_linechartButtonActionPerformed
-
-    private void playplayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playplayButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_playplayButtonActionPerformed
 
     private void speedSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_speedSliderStateChanged
         
@@ -350,6 +400,22 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
         ctrl.setCursor(Integer.parseInt(cursorField.getText()));
     }//GEN-LAST:event_cursorFieldActionPerformed
 
+    private void playplayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playplayButtonActionPerformed
+        this.playButton.setEnabled(false);
+        this.pauseButton.setEnabled(false);
+        this.playplayButton.setEnabled(false);
+        runEventPlayPlay();
+    }//GEN-LAST:event_playplayButtonActionPerformed
+    public void runEventPlayPlay() {
+        try {
+                this.backtest.run(strategy);
+                this.progressBar.setValue(100);
+                this.ctrl.shiftCursor(1);
+        } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, e);
+        }
+    }
     public void updateCursor(int c){
         
         cursorField.setText(String.valueOf(c)); 

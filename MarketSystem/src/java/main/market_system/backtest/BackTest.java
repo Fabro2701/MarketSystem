@@ -21,6 +21,7 @@ public class BackTest {
 	private MarketData data;
 	private Map<String,Double>indicatorsMap;
 	private List<BackTestStats>stats;
+        private boolean done;
 	
 	public BackTest(Broker broker) {
 		this.cursor = 0;
@@ -31,18 +32,19 @@ public class BackTest {
 	}
 	
 	public void init() {
+            done=false;
 		broker.onInit();
 	}
 	public void step(Strategy strategy, int n) {
 		Objects.requireNonNull(data, "null data series for backtest step");
 		
 		for(int i=0;i<n && i+cursor<data.size();i++) {
-			try {
+			/*try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}*/
 			indicatorsMap.clear();
 			data.fillIndicators(indicatorsMap, cursor+i);
 			
@@ -55,6 +57,7 @@ public class BackTest {
 			}
 		}
 		cursor+=n;
+                if(cursor>=data.size())done=true;
 	}
 	public void run(Strategy strategy) {
 		this.step(strategy, data.size());
@@ -70,6 +73,15 @@ public class BackTest {
 	public void setData(MarketData data) {
 		this.setData(data, 0);
 	}
+        public MarketData getData(){
+            return data;
+        }
+        public boolean isDone(){
+            return this.done;
+        }
+        public int getCursor(){
+            return this.cursor;
+        }
 	
 	public static void main(String args[]) {
 		

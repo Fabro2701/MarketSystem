@@ -14,11 +14,15 @@ import market_system.backtest.data.MarketData;
  * @author Fabrizio Ortega
  */
 public class BackTestMainFrame extends javax.swing.JFrame {
-
+    BackTest backtest;
     /**
      * Creates new form BackTestMainFrame
      */
     public BackTestMainFrame() {
+        Broker broker = new Broker(new Client(10d));
+	backtest = new BackTest(broker);
+	backtest.setData(new MarketData("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD.csv"));
+	backtest.init();
         initComponents();
     }
 
@@ -31,7 +35,7 @@ public class BackTestMainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        seriesVisualizerPanel1 = new market_system.backtest.view.series.SeriesPlayerPanel();
+        seriesVisualizerPanel1 = new market_system.backtest.view.series.SeriesPlayerPanel(backtest);
         expertAgentPanel2 = new market_system.backtest.view.ExpertAgentPanel();
         backTestResultPanel2 = new market_system.backtest.view.BackTestResultPanel();
 

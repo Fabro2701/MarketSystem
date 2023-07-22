@@ -49,6 +49,9 @@
   </Layout>
   <SubComponents>
     <Component class="market_system.backtest.view.series.SeriesPlayerPanel" name="seriesVisualizerPanel1">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new market_system.backtest.view.series.SeriesPlayerPanel(backtest);"/>
+      </AuxValues>
     </Component>
     <Component class="market_system.backtest.view.ExpertAgentPanel" name="expertAgentPanel2">
     </Component>

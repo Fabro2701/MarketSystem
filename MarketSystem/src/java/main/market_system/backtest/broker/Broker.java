@@ -135,4 +135,8 @@ public class Broker {
 	public List<Trade> getOpenTrades() {
 		return openTrades;
 	}
+
+	public int getCurrentIdx() {
+		return currentIdx;
+	}
 }

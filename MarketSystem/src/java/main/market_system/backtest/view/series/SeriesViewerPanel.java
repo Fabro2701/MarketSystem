@@ -84,6 +84,14 @@ public class SeriesViewerPanel extends javax.swing.JPanel {
 		
 		//operations
 		opRenderer.render(g2, ctrl.getBroker(), ini, max, min);
+		
+		//cursor
+		g2.setColor(Color.red);
+		int cursor = ctrl.getBroker().getCurrentIdx();
+		if(cursor>=ini&&cursor<ini+RenderConstants.windowSize){
+			g2.drawLine((int)((cursor-ini)*RenderConstants.tickShift), 0, 
+					    (int)((cursor-ini)*RenderConstants.tickShift), (int)height);
+		}
     }
     @Override
     public void paintComponent(Graphics g) {

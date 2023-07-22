@@ -73,14 +73,16 @@ public class BackTest {
 	
 	public static void main(String args[]) {
 		
-		Broker broker = new Broker(new Client(2d));
+		Broker broker = new Broker(new Client(10d));
 		BackTest bt = new BackTest(broker);
 		bt.setData(new MarketData("resources/data/EURUSDr2.csv"));
 		bt.init();
 		
 		Strategy strat = new UserStrategy();
 		bt.step(strat, 1);
-		broker.sendFixedTimeOrder(ORDER_TYPE.BUY, 1d, 24*60*20L, null);
+		broker.sendFixedTimeOrder(ORDER_TYPE.BUY, 1d, 24*60*5L, null);
+		bt.step(strat, 2);
+		broker.sendFixedTimeOrder(ORDER_TYPE.BUY, 1d, 24*60*5L, null);
 		//broker.sendFixedTimeOrder(ORDER_TYPE.BUY, 1d, 1000000L, null);
 		//broker.sendFixedTimeOrder(ORDER_TYPE.BUY, 1d, 1000000L, null);
 		bt.step(strat, 50);

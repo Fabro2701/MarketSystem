@@ -16,7 +16,13 @@ public class Deal {
 		this.openTime = trade.getOpenDate();
 		this.openPrice = trade.getOpenPrice();
 		
-		this.profit = (closePrice-openPrice)*volume;
+		if(trade.getType()==ORDER_TYPE.BUY) {
+			this.profit = (closePrice-openPrice)*volume;
+		}
+		else {
+			this.profit = (openPrice-closePrice)*volume;
+		}
+		
 		
 	}
 	public int getId() {

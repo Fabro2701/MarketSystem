@@ -63,7 +63,6 @@ public class PositionStats extends BackTestStats{
 
 		((DefaultCategoryDataset)dataset1).addValue(position.getEquity(), "equity", date);
 		((DefaultCategoryDataset)dataset1).addValue(position.getBalance(), "balance", date);
-		((DefaultCategoryDataset)dataset2).addValue(position.getMargin(), "maring", date);
 		frame.repaint();
 	}
 }

@@ -44,29 +44,29 @@ public class Broker {
 		//tp sl fixedtime ...
 		for(int i=0;i<this.openTrades.size();i++) {
 			if(this.openTrades.get(i).update(date, candle.open)) {
-				Deal deal = new Deal(dGens.getNext(), date, candle.open, this.openTrades.get(i));
-				this.deals.add(deal);
+				
+				Deal deal = this.closeTrade(this.openTrades.get(i), date, candle.open);
+				
 				this.openTrades.remove(i);
 				i--;
 			}
 		}
 		
 		//open pending orders
-		double margin = position.getMargin();
 		double equity = position.getEquity();
+		double balance = position.getBalance();
 		for(int i=0;i<this.pendingOrders.size();i++) {
 			Order o = this.pendingOrders.get(i);
-			if(margin<o.getVolume()*o.getOpenPrice()) {
-				System.err.println("Order couldn't be open >>> "+o.toString()+" Available equity: "+equity);
+			if(balance<o.getVolume()*o.getOpenPrice()) {
+				System.err.println("Order couldn't be open >>> "+o.toString()+" Available balance: "+balance);
 				continue;
 			}
 			//trade opens at o.getOpenPrice()
 			Trade t = new Trade(tGens.getNext(), date, o.getOpenPrice(), o.getVolume(), o);
-			margin -= o.getVolume()*o.getOpenPrice();
-			position.substract(o.getVolume()*o.getOpenPrice());
+			position.substractFromBalance(o.getVolume()*o.getOpenPrice());
 			this.openTrades.add(t);
 			this.closedOrders.add(o);
-			System.out.println("Order opened >>> "+o.toString()+" Available balance: "+equity);
+			System.out.println("Order opened >>> "+o.toString()+" Available balance: "+balance);
 		}this.pendingOrders.clear();
 		
 		
@@ -81,8 +81,7 @@ public class Broker {
 	public void onEnd() {
 		//close everything...
 		for(int i=0;i<this.openTrades.size();i++) {
-			Deal deal = new Deal(dGens.getNext(), this.currentDate, this.currentPrice, this.openTrades.get(i));
-			this.deals.add(deal);
+			Deal deal = closeTrade(this.openTrades.get(i),this.currentDate,this.currentPrice);
 			this.openTrades.remove(i);
 			i--;
 		}
@@ -95,6 +94,14 @@ public class Broker {
 		
 		
 		System.out.println("Final balance: "+position.getEquity());
+	}
+	private Deal closeTrade(Trade trade, LocalDateTime date, double price) {
+		Deal deal = new Deal(dGens.getNext(), date, price, trade);
+		System.out.printf("Trade closed at %f %s profit: %f\n", price, date.toString(),deal.profit);
+		
+		this.deals.add(deal);
+		position.addToBalance(deal.getClosePrice()*deal.getVolume());
+		return deal;
 	}
 
 	public boolean sendOrder(ORDER_TYPE type, double volume, String comment) {

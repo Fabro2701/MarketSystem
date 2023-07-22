@@ -8,6 +8,7 @@ public class Deal {
 	int id,iniIdx,endIdx;
 	double volume,openPrice,closePrice,profit;
 	LocalDateTime openTime, closeTime;
+	Trade trade;
 	public Deal(int id, int idx, LocalDateTime date, double price, Trade trade) {
 		this.id = id;
 		this.iniIdx = trade.getIdx();
@@ -17,6 +18,7 @@ public class Deal {
 		this.volume = trade.getVolume();
 		this.openTime = trade.getOpenDate();
 		this.openPrice = trade.getOpenPrice();
+		this.trade = trade;
 		
 		if(trade.getType()==ORDER_TYPE.BUY) {
 			this.profit = (closePrice-openPrice)*volume;
@@ -53,6 +55,9 @@ public class Deal {
 	}
 	public int getEndIdx() {
 		return endIdx;
+	}
+	public Trade getTrade() {
+		return this.trade;
 	}
 
 }

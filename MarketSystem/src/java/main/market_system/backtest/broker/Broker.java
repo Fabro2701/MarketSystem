@@ -131,4 +131,8 @@ public class Broker {
 	public List<Deal> getDeals() {
 		return deals;
 	}
+
+	public List<Trade> getOpenTrades() {
+		return openTrades;
+	}
 }

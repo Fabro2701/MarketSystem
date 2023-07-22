@@ -14,7 +14,7 @@ import market_system.backtest.data.MarketData;
  * @author Fabrizio Ortega
  */
 public class BackTestMainFrame extends javax.swing.JFrame {
-    BackTest backtest;
+    BackTest backtest; 
     /**
      * Creates new form BackTestMainFrame
      */

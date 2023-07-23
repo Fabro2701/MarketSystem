@@ -4,12 +4,12 @@
  */
 package market_system.backtest.view.series;
 
-import javax.swing.JFrame;
+import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
+import javax.swing.plaf.basic.BasicProgressBarUI;
 import market_system.backtest.BackTest;
-import market_system.backtest.data.MarketData;
 import market_system.backtest.strategy.Strategy;
 import market_system.backtest.strategy.UserStrategy;
 
@@ -38,6 +38,7 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
         ctrl = new SeriesPlayerController(this);
         
         initComponents();
+        progressBar.setUI(new BasicProgressBarUI());
         
         ctrl.setData(backtest.getData());
         ctrl.setBroker(backtest.getBroker());
@@ -45,6 +46,9 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
         this.candleButton.setSelected(true);
         this.pauseButton.setEnabled(false);
         simStop = true;
+        
+
+           
     }
 
     /**
@@ -78,9 +82,11 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
         jPanel4 = new javax.swing.JPanel();
         seriesViewerPanel =  new market_system.backtest.view.series.SeriesViewerPanel(ctrl);
 
-        setBackground(new java.awt.Color(204, 204, 255));
+        setBackground(new java.awt.Color(204, 204, 204));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
         setPreferredSize(new java.awt.Dimension(1500, 568));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         navigatorSlider.setValue(0);
         navigatorSlider.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -130,6 +136,8 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+
         jLabel1.setText("Speed");
 
         speedSlider.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -153,6 +161,11 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
                 dateFieldActionPerformed(evt);
             }
         });
+
+        progressBar.setBackground(new java.awt.Color(255, 255, 255));
+        progressBar.setForeground(new java.awt.Color(0, 204, 0));
+        progressBar.setValue(10);
+        progressBar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jButton8.setText("jButton3");
 
@@ -264,6 +277,8 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
                             .addComponent(dateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);

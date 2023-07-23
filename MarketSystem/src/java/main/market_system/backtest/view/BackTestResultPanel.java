@@ -36,7 +36,7 @@ public class BackTestResultPanel extends javax.swing.JPanel {
         balancePanel1 = new market_system.backtest.view.results.BalancePanel(backtest);
         market_system.backtest.view.results.TradesPanel tradesPanel1 = new market_system.backtest.view.results.TradesPanel(backtest);
 
-        setBackground(new java.awt.Color(0, 204, 204));
+        setBackground(new java.awt.Color(204, 204, 204));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
         setMaximumSize(new java.awt.Dimension(2180, 300));
         setMinimumSize(new java.awt.Dimension(2180, 300));

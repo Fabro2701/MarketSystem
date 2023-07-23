@@ -4,6 +4,7 @@
  */
 package market_system.backtest.view.results;
 
+import java.awt.Color;
 import java.time.LocalDateTime;
 import market_system.backtest.BackTest;
 import market_system.backtest.broker.Position;
@@ -37,15 +38,17 @@ public class BalancePanel extends javax.swing.JPanel {
             }
         }
 
-       JFreeChart result = ChartFactory.createLineChart(
-            "balance",
-            "Years","Number of Schools",
+       JFreeChart chart = ChartFactory.createLineChart(
+            "",
+            "","",
             data,
             PlotOrientation.VERTICAL,
             true,true,false);
-    
+       
+        chart.getPlot().setBackgroundPaint(Color.white);
+        
 
-	ChartPanel panel = new ChartPanel(result); 
+	ChartPanel panel = new ChartPanel(chart); 
 	panel.setPreferredSize( new java.awt.Dimension(2174, 263));
         this.add(panel);
     }
@@ -59,8 +62,7 @@ public class BalancePanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setBackground(new java.awt.Color(204, 204, 0));
-        setForeground(new java.awt.Color(51, 153, 0));
+        setBackground(new java.awt.Color(204, 204, 204));
         setMaximumSize(new java.awt.Dimension(2174, 263));
         setMinimumSize(new java.awt.Dimension(2174, 263));
         setPreferredSize(new java.awt.Dimension(2174, 263));

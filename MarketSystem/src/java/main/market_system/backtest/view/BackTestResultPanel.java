@@ -4,16 +4,22 @@
  */
 package market_system.backtest.view;
 
+import market_system.backtest.BackTest;
+
 /**
  *
  * @author Fabrizio Ortega
  */
 public class BackTestResultPanel extends javax.swing.JPanel {
-
+    BackTest backtest;
     /**
      * Creates new form BackTestResultPanel
      */
     public BackTestResultPanel() {
+        initComponents();
+    }
+    public BackTestResultPanel(BackTest backtest) {
+        this.backtest = backtest;
         initComponents();
     }
 
@@ -26,87 +32,39 @@ public class BackTestResultPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        tabbedPane = new javax.swing.JTabbedPane();
-        balancePanel = new market_system.backtest.view.results.BalancePanel();
-        metricsPanel = new javax.swing.JPanel();
-        tradesPanel = new market_system.backtest.view.results.TradesPanel();
-        logPanel = new javax.swing.JPanel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        balancePanel1 = new market_system.backtest.view.results.BalancePanel(backtest);
+        tradesPanel1 = new market_system.backtest.view.results.TradesPanel();
 
         setBackground(new java.awt.Color(0, 204, 204));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
         setMaximumSize(new java.awt.Dimension(2180, 300));
         setMinimumSize(new java.awt.Dimension(2180, 300));
 
-        javax.swing.GroupLayout balancePanelLayout = new javax.swing.GroupLayout(balancePanel);
-        balancePanel.setLayout(balancePanelLayout);
-        balancePanelLayout.setHorizontalGroup(
-            balancePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 2174, Short.MAX_VALUE)
-        );
-        balancePanelLayout.setVerticalGroup(
-            balancePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 263, Short.MAX_VALUE)
-        );
-
-        tabbedPane.addTab("Balance", balancePanel);
-
-        javax.swing.GroupLayout metricsPanelLayout = new javax.swing.GroupLayout(metricsPanel);
-        metricsPanel.setLayout(metricsPanelLayout);
-        metricsPanelLayout.setHorizontalGroup(
-            metricsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 2174, Short.MAX_VALUE)
-        );
-        metricsPanelLayout.setVerticalGroup(
-            metricsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 263, Short.MAX_VALUE)
-        );
-
-        tabbedPane.addTab("Metrics", metricsPanel);
-
-        javax.swing.GroupLayout tradesPanelLayout = new javax.swing.GroupLayout(tradesPanel);
-        tradesPanel.setLayout(tradesPanelLayout);
-        tradesPanelLayout.setHorizontalGroup(
-            tradesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 2174, Short.MAX_VALUE)
-        );
-        tradesPanelLayout.setVerticalGroup(
-            tradesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 263, Short.MAX_VALUE)
-        );
-
-        tabbedPane.addTab("Trades", tradesPanel);
-
-        javax.swing.GroupLayout logPanelLayout = new javax.swing.GroupLayout(logPanel);
-        logPanel.setLayout(logPanelLayout);
-        logPanelLayout.setHorizontalGroup(
-            logPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 2174, Short.MAX_VALUE)
-        );
-        logPanelLayout.setVerticalGroup(
-            logPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 263, Short.MAX_VALUE)
-        );
-
-        tabbedPane.addTab("Log", logPanel);
+        jTabbedPane1.setMaximumSize(new java.awt.Dimension(2180, 300));
+        jTabbedPane1.setMinimumSize(new java.awt.Dimension(2180, 300));
+        jTabbedPane1.setPreferredSize(new java.awt.Dimension(2180, 300));
+        jTabbedPane1.addTab("Balance", balancePanel1);
+        jTabbedPane1.addTab("Trades", tradesPanel1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 6, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabbedPane)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private market_system.backtest.view.results.BalancePanel balancePanel;
-    private javax.swing.JPanel logPanel;
-    private javax.swing.JPanel metricsPanel;
-    private javax.swing.JTabbedPane tabbedPane;
-    private market_system.backtest.view.results.TradesPanel tradesPanel;
+    private market_system.backtest.view.results.BalancePanel balancePanel1;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private market_system.backtest.view.results.TradesPanel tradesPanel1;
     // End of variables declaration//GEN-END:variables
 }

@@ -20,12 +20,15 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 import market_system.backtest.broker.Broker;
 import market_system.backtest.broker.Position;
+import market_system.backtest.view.results.BalancePanel;
 
 public class PositionStats extends BackTestStats{
 	DefaultCategoryDataset dataset1,dataset2;
 	JFrame frame;
+	int updateRate=10;
+	BalancePanel balancePanel;
 	public PositionStats() {
-		frame = new JFrame();
+		/*frame = new JFrame();
 		dataset1 = new DefaultCategoryDataset();
 		dataset2 = new DefaultCategoryDataset();
 		EventQueue.invokeLater(() -> {
@@ -55,14 +58,24 @@ public class PositionStats extends BackTestStats{
 			frame.pack();
 			frame.setVisible(true);
 			
-        });
+        });*/
 	}
-	public  void onTick(LocalDateTime date, Broker broker) {
+	public void setPanelObserver(BalancePanel balancePanel) {
+		this.balancePanel = balancePanel;
+	}
+	@Override
+	public void onTick(LocalDateTime date, Broker broker) {
 		Position position = broker.getPosition();
 		System.out.println(date+" "+position);
+		if(this.balancePanel!=null)balancePanel.update(date, position);
 
-		((DefaultCategoryDataset)dataset1).addValue(position.getEquity(), "equity", date);
+		/*((DefaultCategoryDataset)dataset1).addValue(position.getEquity(), "equity", date);
 		((DefaultCategoryDataset)dataset1).addValue(position.getBalance(), "balance", date);
-		frame.repaint();
+		frame.repaint();*/
+	}
+	@Override
+	public void onEnd(Broker broker) {
+		// TODO Auto-generated method stub
+		
 	}
 }

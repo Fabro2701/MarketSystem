@@ -56,6 +56,9 @@
     <Component class="market_system.backtest.view.ExpertAgentPanel" name="expertAgentPanel2">
     </Component>
     <Component class="market_system.backtest.view.BackTestResultPanel" name="backTestResultPanel2">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new market_system.backtest.view.BackTestResultPanel(backtest);"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

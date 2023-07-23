@@ -20,15 +20,15 @@ public class BackTest {
 	private Broker broker;
 	private MarketData data;
 	private Map<String,Double>indicatorsMap;
-	private List<BackTestStats>stats;
+	private List<BackTestStats>statsObservers;
         private boolean done;
 	
 	public BackTest(Broker broker) {
 		this.cursor = 0;
 		this.broker = broker;
 		this.indicatorsMap = new HashMap<>();
-		stats = new ArrayList<>();
-		stats.add(new PositionStats());
+		statsObservers = new ArrayList<>();
+		statsObservers.add(new PositionStats());
 	}
 	
 	public void init() {
@@ -52,12 +52,12 @@ public class BackTest {
 			strategy.onTick(i+cursor, data.getDate(cursor+i), data.get(cursor+i), indicatorsMap, broker);
 			
 			//observers
-			for(BackTestStats s:this.stats) {
+			for(BackTestStats s:this.statsObservers) {
 				s.onTick(data.getDate(cursor+i), broker);
 			}
 		}
 		cursor+=n;
-                if(cursor>=data.size())done=true;
+		if(cursor>=data.size())done=true;
 	}
 	public void run(Strategy strategy) {
 		this.step(strategy, data.size());
@@ -86,6 +86,10 @@ public class BackTest {
 	public Broker getBroker() {
 			return broker;
 		}
+
+	public List<BackTestStats> getStatsObservers() {
+		return statsObservers;
+	}
 
 	public static void main(String args[]) {
 		

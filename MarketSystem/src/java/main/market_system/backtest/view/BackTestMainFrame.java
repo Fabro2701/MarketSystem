@@ -37,7 +37,7 @@ public class BackTestMainFrame extends javax.swing.JFrame {
 
         seriesVisualizerPanel1 = new market_system.backtest.view.series.SeriesPlayerPanel(backtest);
         expertAgentPanel2 = new market_system.backtest.view.ExpertAgentPanel();
-        backTestResultPanel2 = new market_system.backtest.view.BackTestResultPanel();
+        backTestResultPanel2 = new market_system.backtest.view.BackTestResultPanel(backtest);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 204, 0));

@@ -11,5 +11,11 @@ public class FullStats extends BackTestStats{
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public void onEnd(Broker broker) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

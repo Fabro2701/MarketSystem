@@ -4,17 +4,50 @@
  */
 package market_system.backtest.view.results;
 
+import java.time.LocalDateTime;
+import market_system.backtest.BackTest;
+import market_system.backtest.broker.Position;
+import market_system.backtest.stats.BackTestStats;
+import market_system.backtest.stats.PositionStats;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
+
 /**
  *
  * @author Fabrizio Ortega
  */
 public class BalancePanel extends javax.swing.JPanel {
+	DefaultCategoryDataset data;
 
     /**
      * Creates new form BalancePanel
      */
     public BalancePanel() {
         initComponents();
+    }
+    public BalancePanel(BackTest backtest) {
+        initComponents();
+        data = new DefaultCategoryDataset();
+        for(BackTestStats s:backtest.getStatsObservers()) {
+            if(s instanceof PositionStats) {
+                    ((PositionStats)s).setPanelObserver(this);
+            }
+        }
+
+       JFreeChart result = ChartFactory.createLineChart(
+            "balance",
+            "Years","Number of Schools",
+            data,
+            PlotOrientation.VERTICAL,
+            true,true,false);
+    
+
+	ChartPanel panel = new ChartPanel(result); 
+	panel.setPreferredSize( new java.awt.Dimension(2174, 263));
+        this.add(panel);
     }
 
     /**
@@ -31,19 +64,12 @@ public class BalancePanel extends javax.swing.JPanel {
         setMaximumSize(new java.awt.Dimension(2174, 263));
         setMinimumSize(new java.awt.Dimension(2174, 263));
         setPreferredSize(new java.awt.Dimension(2174, 263));
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 2174, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 263, Short.MAX_VALUE)
-        );
     }// </editor-fold>//GEN-END:initComponents
 
+	public void update(LocalDateTime date, Position position) {
+		data.addValue(position.getEquity(), "equity", date);
+		data.addValue(position.getBalance(), "balance", date);
+	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

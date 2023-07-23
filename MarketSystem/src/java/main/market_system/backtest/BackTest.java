@@ -1,6 +1,5 @@
 package market_system.backtest;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +11,7 @@ import market_system.backtest.broker.order.Order.ORDER_TYPE;
 import market_system.backtest.data.MarketData;
 import market_system.backtest.stats.BackTestStats;
 import market_system.backtest.stats.PositionStats;
+import market_system.backtest.stats.TradesStats;
 import market_system.backtest.strategy.Strategy;
 import market_system.backtest.strategy.UserStrategy;
 
@@ -27,8 +27,7 @@ public class BackTest {
 		this.cursor = 0;
 		this.broker = broker;
 		this.indicatorsMap = new HashMap<>();
-		statsObservers = new ArrayList<>();
-		statsObservers.add(new PositionStats());
+		statsObservers =  List.of(new PositionStats(), new TradesStats());
 	}
 	
 	public void init() {

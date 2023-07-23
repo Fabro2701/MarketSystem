@@ -34,7 +34,7 @@ public class BackTestResultPanel extends javax.swing.JPanel {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
         balancePanel1 = new market_system.backtest.view.results.BalancePanel(backtest);
-        tradesPanel1 = new market_system.backtest.view.results.TradesPanel();
+        market_system.backtest.view.results.TradesPanel tradesPanel1 = new market_system.backtest.view.results.TradesPanel(backtest);
 
         setBackground(new java.awt.Color(0, 204, 204));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
@@ -65,6 +65,5 @@ public class BackTestResultPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private market_system.backtest.view.results.BalancePanel balancePanel1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private market_system.backtest.view.results.TradesPanel tradesPanel1;
     // End of variables declaration//GEN-END:variables
 }

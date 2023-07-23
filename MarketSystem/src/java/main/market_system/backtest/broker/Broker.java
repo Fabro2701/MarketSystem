@@ -103,6 +103,8 @@ public class Broker {
 		
 		this.deals.add(deal);
 		position.addToBalance(deal.getClosePrice()*deal.getVolume());
+                
+                this.closedTrades.add(trade);
 	}
 
 	public boolean sendOrder(ORDER_TYPE type, double volume, String comment) {
@@ -134,6 +136,9 @@ public class Broker {
 
 	public List<Trade> getOpenTrades() {
 		return openTrades;
+	}
+	public List<Trade> getClosedTrades() {
+		return closedTrades;
 	}
 
 	public int getCurrentIdx() {

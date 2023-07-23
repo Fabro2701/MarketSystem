@@ -44,4 +44,7 @@ public class Trade {
 	public int getIdx() {
 		return idx;
 	}
+	public int getId() {
+		return id;
+	}
 }

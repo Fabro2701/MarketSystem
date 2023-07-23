@@ -4,19 +4,61 @@
  */
 package market_system.backtest.view.results;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.util.List;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import market_system.backtest.BackTest;
+import market_system.backtest.broker.Deal;
+import market_system.backtest.broker.Trade;
+import market_system.backtest.stats.BackTestStats;
+import market_system.backtest.stats.TradesStats;
 /**
  *
  * @author Fabrizio Ortega
  */
 public class TradesPanel extends javax.swing.JPanel {
-
+    JTable table;
+    TradesTableModel tableModel;
     /**
      * Creates new form TradesPanel
      */
     public TradesPanel() {
         initComponents();
     }
+    public TradesPanel(BackTest backtest) {
+        for(BackTestStats s:backtest.getStatsObservers()) {
+            if(s instanceof TradesStats) {
+                    ((TradesStats)s).setPanelObserver(this);
+            }
+        }
+        tableModel = new TradesTableModel();
+        table = new JTable(tableModel);
+        table.getColumnModel().getColumn(7).setCellRenderer(new ColorCellRenderer());
+        initComponents();
+    }
+    private static class ColorCellRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component cellComponent = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
+            // Obtener el valor de la celda
+            Double v = (Double) value;
+            if(v>0d){
+                cellComponent.setBackground(Color.GREEN);
+            }
+            else if(v<0d){
+                cellComponent.setBackground(Color.RED);
+            }
+            else{
+                cellComponent.setBackground(table.getBackground());
+            }
+       
+
+            return cellComponent;
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -26,6 +68,9 @@ public class TradesPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane(table);
+        table.setFillsViewportHeight(true);
+
         setMaximumSize(new java.awt.Dimension(2174, 263));
         setMinimumSize(new java.awt.Dimension(2174, 263));
         setPreferredSize(new java.awt.Dimension(2174, 263));
@@ -34,15 +79,20 @@ public class TradesPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 2174, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 2174, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+
+    public void update(List<Deal> deals, List<Trade> otrades) {
+        if(this.tableModel.update(deals,otrades))this.repaint();
+    }
 }

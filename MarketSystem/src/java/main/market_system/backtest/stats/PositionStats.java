@@ -66,7 +66,7 @@ public class PositionStats extends BackTestStats{
 	@Override
 	public void onTick(LocalDateTime date, Broker broker) {
 		Position position = broker.getPosition();
-		System.out.println(date+" "+position);
+		//System.out.println(date+" "+position);
 		if(this.balancePanel!=null)balancePanel.update(date, position);
 
 		/*((DefaultCategoryDataset)dataset1).addValue(position.getEquity(), "equity", date);

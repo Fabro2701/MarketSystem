@@ -20,12 +20,16 @@ public class Trade {
 		this.openDate = openDate;
 		this.openPrice = currentPrice;
 	}
-	public boolean update(LocalDateTime date, double price) {
+	public boolean update(int idx, LocalDateTime date, double price) {
 		if(order instanceof FixedTimeOrder) {
-			long duration = Duration.between(order.getOpenDate(), date).toMinutes();
-			if(duration>((FixedTimeOrder)order).getDuration()) {
+			if(idx-this.idx>=((FixedTimeOrder)order).getDuration()) {
 				return true;
 			}
+		
+			/*long duration = Duration.between(order.getOpenDate(), date).toMinutes();
+			if(duration>((FixedTimeOrder)order).getDuration()) {
+				return true;
+			}*/
 		}
 		return false;
 	}

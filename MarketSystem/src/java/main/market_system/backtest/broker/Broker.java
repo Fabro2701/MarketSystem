@@ -44,7 +44,7 @@ public class Broker {
 		//pending.. max and min of the candle for update
 		//tp sl fixedtime ...
 		for(int i=0;i<this.openTrades.size();i++) {
-			if(this.openTrades.get(i).update(date, candle.open)) {
+			if(this.openTrades.get(i).update(idx, date, candle.open)) {
 				
 				this.closeTrade(idx, this.openTrades.get(i), date, candle.open);
 				

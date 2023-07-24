@@ -2,9 +2,10 @@ package market_system.backtest.data;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.time.Duration;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -37,13 +38,15 @@ public class MarketData extends ArrayList<CandleData>{
 		
 		File file = new File(filename);
 		String[] values;
-		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+		
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_16))) {
 		    String line;
 		    br.readLine();//first line
 		    while ((line = br.readLine()) != null) {
 		    	values = line.split(delimiter);
 		    	
-		    	LocalDateTime date = LocalDateTime.parse(values[0].contains(":")?values[0]:values[0]+" 00:00:00", formatter);
+		    	//LocalDateTime date = LocalDateTime.parse(values[0].contains(":")?values[0]:values[0]+" 00:00:00", formatter);
+		    	LocalDateTime date = LocalDateTime.parse(values[0], formatter);
 		    	dates.add(date);
 		    	
 		    	CandleData cd = new CandleData(Double.parseDouble(values[1]), 
@@ -63,7 +66,7 @@ public class MarketData extends ArrayList<CandleData>{
 	static {
 		defaultProperties = new Properties();
 		defaultProperties.put("delimiter", ",");
-		defaultProperties.put("date_format", "yyyy-MM-dd HH:mm:ss");
+		defaultProperties.put("date_format", "yyyy.MM.dd HH:mm");
 		defaultProperties.put("capacity", "0");
 		//pending columns order inluding the indicators reading
 		
@@ -86,11 +89,13 @@ public class MarketData extends ArrayList<CandleData>{
 	
 	
 	public static void main(String arg[]) {
-		//MarketData m = new MarketData("resources/data/EURUSDr.csv");
+		MarketData m = new MarketData("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1.csv");
+		/*
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		Duration duration = Duration.between(LocalDateTime.parse("2010-01-01 15:30:00", formatter), 
 											 LocalDateTime.parse("2011-01-02 16:31:00", formatter));
 		System.out.println(duration.toMinutes());
+		*/
 		//LocalDateTime date = LocalDateTime.parse("2010-01-01", formatter);
 		/*String str = "2023-06-17 15:30:00";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

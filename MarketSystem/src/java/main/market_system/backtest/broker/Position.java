@@ -27,8 +27,8 @@ public class Position {
 			double volume = trade.getVolume();
 			ORDER_TYPE type = trade.getType();
 			
-			if(type==ORDER_TYPE.BUY)equity += (close-openPrice)*volume;
-			else equity -= (close-openPrice)*volume;
+			if(type==ORDER_TYPE.BUY)equity += (openPrice+(close-openPrice))*volume;
+			else equity += (openPrice+(openPrice-close))*volume;
 		}
 		equity += this.balance;
 		

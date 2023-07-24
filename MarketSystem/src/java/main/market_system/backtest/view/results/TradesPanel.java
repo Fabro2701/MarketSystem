@@ -8,6 +8,9 @@ import java.awt.Color;
 import java.awt.Component;
 import java.util.List;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import market_system.backtest.BackTest;
 import market_system.backtest.broker.Deal;
@@ -36,7 +39,15 @@ public class TradesPanel extends javax.swing.JPanel {
         tableModel = new TradesTableModel();
         table = new JTable(tableModel);
         table.getColumnModel().getColumn(7).setCellRenderer(new ColorCellRenderer());
+        //table.setMaximumSize(new java.awt.Dimension(2174, 263));
+        //table.setMinimumSize(new java.awt.Dimension(2174, 263));
+        //table.setPreferredSize(new java.awt.Dimension(2174, 263));
+        
+        //table.setPreferredScrollableViewportSize( new java.awt.Dimension(2174, 263));
+        //table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         initComponents();
+        table.setFillsViewportHeight(true);
+       
     }
     private static class ColorCellRenderer extends DefaultTableCellRenderer {
         @Override
@@ -68,31 +79,27 @@ public class TradesPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane(table);
-        table.setFillsViewportHeight(true);
+        jScrollPane2 = new javax.swing.JScrollPane(table);
 
         setMaximumSize(new java.awt.Dimension(2174, 263));
         setMinimumSize(new java.awt.Dimension(2174, 263));
         setPreferredSize(new java.awt.Dimension(2174, 263));
+        setLayout(new java.awt.BorderLayout());
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 2174, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
-        );
+        jScrollPane2.setMaximumSize(new java.awt.Dimension(2174, 263));
+        jScrollPane2.setMinimumSize(new java.awt.Dimension(2174, 263));
+        jScrollPane2.setPreferredSize(new java.awt.Dimension(2174, 263));
+        add(jScrollPane2, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
 
     public void update(List<Deal> deals, List<Trade> otrades) {
-        if(this.tableModel.update(deals,otrades))this.repaint();
+        if(this.tableModel.update(deals,otrades)){
+            this.repaint();
+        }
     }
 }

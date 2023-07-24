@@ -73,6 +73,7 @@ public class Broker {
 		
 		//update position
 		this.position.update(this.openTrades, this.deals, candle.close);
+                //System.out.println(this.position);
 		
 		currentDate = date;
 		currentPrice = candle.close;
@@ -102,7 +103,7 @@ public class Broker {
 		System.out.printf("Trade closed at %f %s profit: %f\n", price, date.toString(),deal.profit);
 		
 		this.deals.add(deal);
-		position.addToBalance(deal.getClosePrice()*deal.getVolume());
+		position.addToBalance(deal.getOpenPrice()*deal.getVolume()+deal.profit);
                 
                 this.closedTrades.add(trade);
 	}

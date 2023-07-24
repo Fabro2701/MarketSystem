@@ -374,6 +374,7 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
                         this.playButton.setEnabled(false);
                         this.pauseButton.setEnabled(false);
                         this.playplayButton.setEnabled(false);
+                        this.backtest.end();
                         return;
                     }
                     this.ctrl.shiftCursor(n);

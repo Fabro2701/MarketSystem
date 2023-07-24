@@ -6,6 +6,9 @@ package market_system.backtest.view.results;
 
 import java.util.List;
 import java.util.Vector;
+import javax.swing.SwingUtilities;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import market_system.backtest.broker.Deal;
 import market_system.backtest.broker.Trade;
@@ -32,6 +35,8 @@ public class TradesTableModel extends DefaultTableModel{
             this.dataVector.add(new Vector(List.of(d.getOpenTime(),d.getId(), d.getTrade().getType(),d.getOpenPrice(), d.getVolume(), d.getCloseTime(), d.getClosePrice(), d.getProfit(), "")));
             cursor++;
             b=true;
+            //this.fireTableStructureChanged();
+            this.fireTableDataChanged();
         }
         return b;
     }

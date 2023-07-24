@@ -41,7 +41,10 @@ public class MarketData extends ArrayList<CandleData>{
 		
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_16))) {
 		    String line;
-		    br.readLine();//first line
+		    String header[] = br.readLine().split(delimiter);
+		    int inds=header.length-5;
+		    for(String ind:header)this.indicators.put(ind, new ArrayList<>());
+		    
 		    while ((line = br.readLine()) != null) {
 		    	values = line.split(delimiter);
 		    	
@@ -54,6 +57,10 @@ public class MarketData extends ArrayList<CandleData>{
 		    								   Double.parseDouble(values[3]), 
 		    								   Double.parseDouble(values[4]));
 		    	this.add(cd);
+		    	
+		    	for(int i=0;i<inds;i++) {
+		    		this.indicators.get(header[5+i]).add(Double.parseDouble(values[5+i]));
+		    	}
 		    }
 		} catch (IOException e) {
 			System.err.println("Error reading data from: "+filename);

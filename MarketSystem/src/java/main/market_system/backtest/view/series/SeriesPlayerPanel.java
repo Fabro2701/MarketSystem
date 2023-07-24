@@ -35,6 +35,7 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
     }
     public SeriesPlayerPanel(BackTest backtest) {
         this.backtest = backtest;
+        this.backtest.init();
         ctrl = new SeriesPlayerController(this);
         
         initComponents();
@@ -427,6 +428,7 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
                 this.backtest.run(strategy);
                 this.progressBar.setValue(100);
                 this.ctrl.shiftCursor(1);
+                this.backtest.end();
         } catch (Exception e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(this, e);

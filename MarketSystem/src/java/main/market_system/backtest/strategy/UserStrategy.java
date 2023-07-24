@@ -20,11 +20,11 @@ public class UserStrategy extends Strategy {
 		if(idx==100) {
 			broker.sendFixedTimeOrder(ORDER_TYPE.SELL, 1d, 100L, null);
 		}*/
-		double threshold=20d;
+		double threshold=40d;
 		if(indicators.get("Momentum10")>threshold &&
 		   indicators.get("Momentum50")>threshold &&
 		   indicators.get("Momentum200")>threshold) {
-			broker.sendFixedTimeOrder(ORDER_TYPE.SELL, 1d, 10L, String.format("%f_%f_%f", indicators.get("Momentum10"),indicators.get("Momentum50"),indicators.get("Momentum200")));
+			broker.sendFixedTimeOrder(ORDER_TYPE.SELL, 50d, 50L, String.format("%f_%f_%f", indicators.get("Momentum10"),indicators.get("Momentum50"),indicators.get("Momentum200")));
 		}
 	}
 

@@ -63,6 +63,10 @@ public class BackTest {
 	}
 	public void end() {
 		broker.onEnd();
+		//observers
+		for(BackTestStats s:this.statsObservers) {
+			s.onTick(data.getDate(data.size()-1), broker);
+		}
 	}
 	
 	public void setData(MarketData data, int c) {

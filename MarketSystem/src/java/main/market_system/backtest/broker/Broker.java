@@ -92,7 +92,7 @@ public class Broker {
 
 		this.closedTrades.clear();
 		this.closedOrders.clear();
-		this.deals.clear();
+		//this.deals.clear();
 		
 		
 		System.out.println("Final balance: "+position.getEquity());

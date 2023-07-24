@@ -39,7 +39,11 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
         ctrl = new SeriesPlayerController(this);
         
         initComponents();
-        progressBar.setUI(new BasicProgressBarUI());
+        //setUI(new BasicProgressBarUI());
+        progressBar.setUI(new BasicProgressBarUI() {
+         protected Color getSelectionBackground() { return Color.black; }
+         protected Color getSelectionForeground() { return Color.white; }
+       });
         
         ctrl.setData(backtest.getData());
         ctrl.setBroker(backtest.getBroker());
@@ -141,13 +145,15 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
 
         jLabel1.setText("Speed");
 
+        speedSlider.setValue(1);
         speedSlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 speedSliderStateChanged(evt);
             }
         });
 
-        speedField.setText("50");
+        speedField.setColumns(4);
+        speedField.setText("1");
         speedField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 speedFieldActionPerformed(evt);
@@ -156,6 +162,7 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
 
         jLabel2.setText("Date");
 
+        dateField.setColumns(8);
         dateField.setText("0");
         dateField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -164,9 +171,10 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
         });
 
         progressBar.setBackground(new java.awt.Color(255, 255, 255));
+        progressBar.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         progressBar.setForeground(new java.awt.Color(0, 204, 0));
-        progressBar.setValue(10);
         progressBar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        progressBar.setStringPainted(true);
 
         jButton8.setText("jButton3");
 

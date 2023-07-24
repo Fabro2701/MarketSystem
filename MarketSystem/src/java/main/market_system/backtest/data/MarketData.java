@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -43,7 +44,7 @@ public class MarketData extends ArrayList<CandleData>{
 		    String line;
 		    String header[] = br.readLine().split(delimiter);
 		    int inds=header.length-5;
-		    for(String ind:header)this.indicators.put(ind, new ArrayList<>());
+		    for(int i=0;i<inds;i++)this.indicators.put(header[i+5], new ArrayList<>());
 		    
 		    while ((line = br.readLine()) != null) {
 		    	values = line.split(delimiter);
@@ -62,6 +63,8 @@ public class MarketData extends ArrayList<CandleData>{
 		    		this.indicators.get(header[5+i]).add(Double.parseDouble(values[5+i]));
 		    	}
 		    }
+		    
+		    System.out.println("File read - "+Arrays.toString(header));
 		} catch (IOException e) {
 			System.err.println("Error reading data from: "+filename);
 			e.printStackTrace();

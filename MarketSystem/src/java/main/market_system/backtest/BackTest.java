@@ -94,7 +94,7 @@ public class BackTest {
 		
 		Broker broker = new Broker(new Client(10d));
 		BackTest bt = new BackTest(broker);
-		bt.setData(new MarketData("resources/data/EURUSDr2.csv"));
+		bt.setData(new MarketData("resources/data/EURUSD-PERIOD_H1.csv"));
 		bt.init();
 		
 		Strategy strat = new UserStrategy();

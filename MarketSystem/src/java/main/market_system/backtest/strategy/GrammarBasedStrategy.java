@@ -31,6 +31,10 @@ public class GrammarBasedStrategy extends Strategy {
 			bull=0d;
 			bear=0d;
 		}
+		public void reset() {
+			bull=0d;
+			bear=0d;
+		}
 	}
 	@Override
 	public void onTick(int idx, LocalDateTime date, CandleData candleData, Map<String, Double> indicators, Broker broker) {
@@ -38,17 +42,19 @@ public class GrammarBasedStrategy extends Strategy {
 		map.putAll(indicators);
 		map.put("cd", candleData);
 		map.put("res", res);
+		//res.reset();
 		try {
 			eval.evaluate(map);
 		} catch (IllegalArgumentException | JSONException | EvaluationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		double threshold=10d;
 		int r=0;
-		if(res.bull>10)r++;
-		if(res.bear>10)r--;
-		if(r>0)broker.sendFixedTimeOrder(ORDER_TYPE.BUY, 1d, 5L, null);
-		if(r<0)broker.sendFixedTimeOrder(ORDER_TYPE.SELL, 1d, 5L, null);
+		if(res.bull>threshold)r++;
+		if(res.bear>threshold)r--;
+		if(r>0)broker.sendFixedTimeOrder(ORDER_TYPE.BUY, 2d, 15L, null);
+		if(r<0)broker.sendFixedTimeOrder(ORDER_TYPE.SELL, 2d, 15L, null);
 	}
 
 }

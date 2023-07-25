@@ -35,6 +35,8 @@ public class BackTestResultPanel extends javax.swing.JPanel {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         balancePanel1 = new market_system.backtest.view.results.BalancePanel(backtest);
         market_system.backtest.view.results.TradesPanel tradesPanel1 = new market_system.backtest.view.results.TradesPanel(backtest);
+        jScrollPane1 = new javax.swing.JScrollPane();
+        metricsPanel2 = new market_system.backtest.view.results.MetricsPanel(backtest);
 
         setBackground(new java.awt.Color(204, 204, 204));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
@@ -46,6 +48,10 @@ public class BackTestResultPanel extends javax.swing.JPanel {
         jTabbedPane1.setPreferredSize(new java.awt.Dimension(2180, 300));
         jTabbedPane1.addTab("Balance", balancePanel1);
         jTabbedPane1.addTab("Trades", tradesPanel1);
+
+        jScrollPane1.setViewportView(metricsPanel2);
+
+        jTabbedPane1.addTab("Metrics", jScrollPane1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -64,6 +70,8 @@ public class BackTestResultPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private market_system.backtest.view.results.BalancePanel balancePanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private market_system.backtest.view.results.MetricsPanel metricsPanel2;
     // End of variables declaration//GEN-END:variables
 }

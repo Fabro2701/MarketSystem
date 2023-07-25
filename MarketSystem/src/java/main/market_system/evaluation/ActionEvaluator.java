@@ -137,6 +137,8 @@ public class ActionEvaluator {
 		switch(op) {
 		case "!":
 			return !(Boolean)this.eval(query.getJSONObject("argument"), env);
+		case "-":
+			return -((Number)this.eval(query.getJSONObject("argument"), env)).doubleValue();
 		default:
 			throw new EvaluationException("Operator "+op+" is not supported yet");
 		}

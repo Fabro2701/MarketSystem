@@ -23,7 +23,8 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
     SeriesPlayerController ctrl;
     boolean simStop;
     //Strategy strategy = new UserStrategy();
-	GrammarBasedStrategy strategy = new GrammarBasedStrategy("res.bull = res.bull + 1;");
+	GrammarBasedStrategy strategy = new GrammarBasedStrategy("if(Momentum10<=-91.9)res.bull=res.bull+7;if(Momentum200>=76.3)res.bull=0;if(Momentum10>87.8)res.bear=0;if(Momentum10>-19.0)res.bear=res.bear+2;if(Momentum50>=-00.0)res.bull=res.bull+3;if(Momentum200<=19.2)res.bear=0;\r\n"
+			+ "");
 
     /**
      * Creates new form SeriesVisualizer

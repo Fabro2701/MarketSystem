@@ -6,6 +6,7 @@ package market_system.backtest.view.results;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
@@ -14,6 +15,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import market_system.backtest.BackTest;
 import market_system.backtest.broker.Deal;
+import market_system.backtest.broker.Position;
 import market_system.backtest.broker.Trade;
 import market_system.backtest.stats.BackTestStats;
 import market_system.backtest.stats.TradesStats;
@@ -21,7 +23,7 @@ import market_system.backtest.stats.TradesStats;
  *
  * @author Fabrizio Ortega
  */
-public class TradesPanel extends javax.swing.JPanel {
+public class TradesPanel extends javax.swing.JPanel implements ResultsObserver {
     JTable table;
     TradesTableModel tableModel;
     /**
@@ -33,7 +35,7 @@ public class TradesPanel extends javax.swing.JPanel {
     public TradesPanel(BackTest backtest) {
         for(BackTestStats s:backtest.getStatsObservers()) {
             if(s instanceof TradesStats) {
-                    ((TradesStats)s).setPanelObserver(this);
+                    ((TradesStats)s).setTradesPanelObserver(this);
             }
         }
         tableModel = new TradesTableModel();
@@ -97,9 +99,11 @@ public class TradesPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
 
-    public void update(List<Deal> deals, List<Trade> otrades) {
-        if(this.tableModel.update(deals,otrades)){
+   
+	@Override
+	public void update(LocalDateTime date, Position position, List<Deal> deals, List<Trade> otrades) {
+		if(this.tableModel.update(deals,otrades)){
             this.repaint();
         }
-    }
+	}
 }

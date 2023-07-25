@@ -48,7 +48,7 @@ public class Test extends Experiment{
 		initModule.addOperator(rinitOp);
 		
 		FitnessModule initFitnessModule = new FitnessModule(generalPopulation, properties,rnd);
-		FitnessEvaluationOperator fitnessInitOp = new BalanceFitnessOperator(properties,rnd);
+		FitnessEvaluationOperator fitnessInitOp = new TradeWinFitnessOperator(properties,rnd);
 		initFitnessModule.addOperator(fitnessInitOp);
 		
 		CollectorModule fitnesscollModule = new CollectorModule(generalPopulation, properties,rnd);
@@ -71,7 +71,7 @@ public class Test extends Experiment{
 		mutationModule.addOperator(mutationOp);
 		
 		FitnessModule fitnessModule = new FitnessModule(selectedPopulation, properties,rnd);
-		FitnessEvaluationOperator fitnessOp = new BalanceFitnessOperator(properties,rnd);
+		FitnessEvaluationOperator fitnessOp = new TradeWinFitnessOperator(properties,rnd);
 		fitnessModule.addOperator(fitnessOp);
 		
 		JoinModule joinModule = new JoinModule(generalPopulation, properties, rnd, selectedPopulation);

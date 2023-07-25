@@ -12,7 +12,7 @@ public class FullStats extends BackTestStats{
 		
 	}
 	@Override
-	public void onEnd(Broker broker) {
+	public void onEnd(LocalDateTime date, Broker broker) {
 		// TODO Auto-generated method stub
 		
 	}

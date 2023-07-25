@@ -69,6 +69,7 @@ public class BackTest {
 		//observers
 		for(BackTestStats s:this.statsObservers) {
 			s.onTick(data.getDate(data.size()-1), broker);
+			s.onEnd(data.getDate(data.size()-1), broker);
 		}
 	}
 	

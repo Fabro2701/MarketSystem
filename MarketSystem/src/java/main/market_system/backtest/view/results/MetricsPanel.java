@@ -4,14 +4,25 @@
  */
 package market_system.backtest.view.results;
 
+import java.awt.Dimension;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import javax.swing.JLabel;
+
 import market_system.backtest.BackTest;
+import market_system.backtest.broker.Deal;
+import market_system.backtest.broker.Position;
+import market_system.backtest.broker.Trade;
+import market_system.backtest.stats.BackTestStats;
+import market_system.backtest.stats.TradesStats;
 
 /**
  *
  * @author Fabrizio Ortega
  */
-public class MetricsPanel extends javax.swing.JPanel {
-
+public class MetricsPanel extends javax.swing.JPanel implements ResultsObserver {
+	TradesStats stats;
     /**
      * Creates new form MetricsPanel
      */
@@ -19,6 +30,12 @@ public class MetricsPanel extends javax.swing.JPanel {
         initComponents();
     }
     public MetricsPanel(BackTest backtest) {
+    	for(BackTestStats s:backtest.getStatsObservers()) {
+            if(s instanceof TradesStats) {
+            	this.stats = ((TradesStats)s);
+            	stats.setMetricsPanelObserver(this);
+            }
+        }
         initComponents();
     }
 
@@ -89,4 +106,23 @@ public class MetricsPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel tradesPanel;
     // End of variables declaration//GEN-END:variables
+    
+	@Override
+	public void update(LocalDateTime date, Position position, List<Deal> deals, List<Trade> otrades) {
+		tradesPanel.add(new JLabel("Number trades"));
+		tradesPanel.add(new JLabel(String.valueOf(stats.getnTrades())));
+		tradesPanel.add(new JLabel("Short trades won %"));
+		tradesPanel.add(new JLabel(String.valueOf(stats.getShortTradesWin())));
+		tradesPanel.add(new JLabel("Long trades won %"));
+		tradesPanel.add(new JLabel(String.valueOf(stats.getLongTradesWin())));
+		tradesPanel.add(new JLabel("Largest profit"));
+		tradesPanel.add(new JLabel(String.valueOf(stats.getLargestProfit())));
+		tradesPanel.add(new JLabel("Avg profit"));
+		tradesPanel.add(new JLabel(String.valueOf(stats.getAvgProfit())));
+		tradesPanel.add(new JLabel("Largest loss"));
+		tradesPanel.add(new JLabel(String.valueOf(stats.getLargestLoss())));
+		tradesPanel.add(new JLabel("Avg loss"));
+		tradesPanel.add(new JLabel(String.valueOf(stats.getAvgLoss())));
+		this.repaint();
+	}
 }

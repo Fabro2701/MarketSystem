@@ -8,6 +8,7 @@ import market_system.backtest.BackTest;
 import market_system.backtest.broker.Broker;
 import market_system.backtest.broker.Client;
 import market_system.backtest.data.MarketData;
+import market_system.backtest.strategy.GrammarBasedStrategy;
 
 /**
  *

@@ -10,6 +10,7 @@ import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.basic.BasicProgressBarUI;
 import market_system.backtest.BackTest;
+import market_system.backtest.strategy.GrammarBasedStrategy;
 import market_system.backtest.strategy.Strategy;
 import market_system.backtest.strategy.UserStrategy;
 
@@ -21,7 +22,9 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
     BackTest backtest;
     SeriesPlayerController ctrl;
     boolean simStop;
-    Strategy strategy = new UserStrategy();
+    //Strategy strategy = new UserStrategy();
+	GrammarBasedStrategy strategy = new GrammarBasedStrategy("res.bull = res.bull + 1;");
+
     /**
      * Creates new form SeriesVisualizer
      */

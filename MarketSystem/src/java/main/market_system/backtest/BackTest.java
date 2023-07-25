@@ -23,11 +23,14 @@ public class BackTest {
 	private List<BackTestStats>statsObservers;
         private boolean done;
 	
-	public BackTest(Broker broker) {
+	public BackTest(Broker broker,List<BackTestStats>obs) {
 		this.cursor = 0;
 		this.broker = broker;
 		this.indicatorsMap = new HashMap<>();
-		statsObservers =  List.of(new PositionStats(), new TradesStats());
+		statsObservers = obs;
+	}
+	public BackTest(Broker broker) {
+		this(broker,List.of(new PositionStats(), new TradesStats()));
 	}
 	
 	public void init() {

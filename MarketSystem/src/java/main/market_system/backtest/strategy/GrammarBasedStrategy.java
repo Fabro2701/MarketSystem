@@ -39,12 +39,16 @@ public class GrammarBasedStrategy extends Strategy {
 		map.put("cd", candleData);
 		map.put("res", res);
 		try {
-			Object r = eval.evaluate(map);
+			eval.evaluate(map);
 		} catch (IllegalArgumentException | JSONException | EvaluationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(res.bull>10)broker.sendFixedTimeOrder(ORDER_TYPE.BUY, 1d, 5L, null);
+		int r=0;
+		if(res.bull>10)r++;
+		if(res.bear>10)r--;
+		if(r>0)broker.sendFixedTimeOrder(ORDER_TYPE.BUY, 1d, 5L, null);
+		if(r<0)broker.sendFixedTimeOrder(ORDER_TYPE.SELL, 1d, 5L, null);
 	}
 
 }

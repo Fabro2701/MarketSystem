@@ -1,0 +1,5 @@
+<S> -> <S><RES>';'|<RES>';'.
+<RES> -> <RES_BULL>|<RES_BEAR>.
+<RES_BULL> -> 'res.bull=res.bull+'<N>.
+<RES_BEAR> -> 'res.bear=res.bear+'<N>.
+<N> -> 1|2|3|4|5|6|7|8|9.

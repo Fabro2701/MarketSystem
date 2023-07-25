@@ -22,6 +22,8 @@ public class Broker {
 	IdGenerator oGens,tGens,dGens;
 	Client client;
 	
+	public static boolean debug = true;
+	
 	public Broker(Client client) {
 		this.client = client;
 		this.closedOrders = new ArrayList<>();
@@ -59,7 +61,7 @@ public class Broker {
 		for(int i=0;i<this.pendingOrders.size();i++) {
 			Order o = this.pendingOrders.get(i);
 			if(balance<o.getVolume()*o.getOpenPrice()) {
-				System.err.println("Order couldn't be open >>> "+o.toString()+" Available balance: "+balance);
+				if(debug)System.err.println("Order couldn't be open >>> "+o.toString()+" Available balance: "+balance);
 				continue;
 			}
 			//trade opens at o.getOpenPrice()
@@ -67,7 +69,7 @@ public class Broker {
 			position.substractFromBalance(o.getVolume()*o.getOpenPrice());
 			this.openTrades.add(t);
 			this.closedOrders.add(o);
-			System.out.println("Order opened >>> "+o.toString()+" Available balance: "+balance);
+			if(debug)System.out.println("Order opened >>> "+o.toString()+" Available balance: "+balance);
 		}this.pendingOrders.clear();
 		
 		
@@ -96,11 +98,11 @@ public class Broker {
 		//this.deals.clear();
 		
 		
-		System.out.println("Final balance: "+position.getEquity());
+		if(debug)System.out.println("Final balance: "+position.getEquity());
 	}
 	private void closeTrade(int idx, Trade trade, LocalDateTime date, double price) {
 		Deal deal = new Deal(dGens.getNext(), idx, date, price, trade);
-		System.out.printf("Trade closed at %f %s profit: %f\n", price, date.toString(),deal.profit);
+		if(debug)System.out.printf("Trade closed at %f %s profit: %f\n", price, date.toString(),deal.profit);
 		
 		this.deals.add(deal);
 		position.addToBalance(deal.getOpenPrice()*deal.getVolume()+deal.profit);

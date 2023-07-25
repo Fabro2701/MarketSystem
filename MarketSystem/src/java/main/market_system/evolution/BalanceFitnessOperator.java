@@ -1,4 +1,4 @@
-package market_system.fitness;
+package market_system.evolution;
 
 import java.util.List;
 import java.util.Properties;
@@ -12,9 +12,9 @@ import market_system.backtest.strategy.GrammarBasedStrategy;
 import model.individual.Individual;
 import model.module.operator.fitness.FitnessEvaluationOperator;
 
-public class MarketFitnessEvaluation extends FitnessEvaluationOperator {
+public class BalanceFitnessOperator extends FitnessEvaluationOperator {
 	MarketData data;
-	public MarketFitnessEvaluation(Properties properties, Random rnd) {
+	public BalanceFitnessOperator(Properties properties, Random rnd) {
 		super(properties, rnd);
 		data = new MarketData("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1.csv");
 		

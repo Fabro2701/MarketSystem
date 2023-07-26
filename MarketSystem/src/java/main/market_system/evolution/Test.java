@@ -27,6 +27,7 @@ import model.module.operator.initialization.InitializationOperator;
 import model.module.operator.join.JoinOperator;
 import model.module.operator.mutation.MutationOperator;
 import model.module.operator.selection.SelectionOperator;
+import view.GrammaticalEvolutionMainFrame;
 
 
 public class Test extends Experiment{
@@ -36,6 +37,8 @@ public class Test extends Experiment{
 	public Test() {
 		super();
 	}
+	
+	FitnessCollectorOperator fitnesscollOp;
 	@Override
 	public void setup(Properties properties) {
 		AbstractPipeline initPipeline = new SimplePipeline();
@@ -52,7 +55,7 @@ public class Test extends Experiment{
 		initFitnessModule.addOperator(fitnessInitOp);
 		
 		CollectorModule fitnesscollModule = new CollectorModule(generalPopulation, properties,rnd);
-		Operator fitnesscollOp = new FitnessCollectorOperator(properties,rnd);
+		fitnesscollOp = new FitnessCollectorOperator(properties,rnd);
 		fitnesscollModule.addOperator(fitnesscollOp);
 
 		//loop
@@ -99,15 +102,31 @@ public class Test extends Experiment{
 		this.algorithm.setLoopPipeline(loopPipeline);
 	}
 	public static void main(String args[]) {
+		boolean op=false;
 		Broker.debug=false;
+		
 		Properties properties = new Properties();
 		try { 
 			properties.load(new FileInputStream(new File("resources/evolution/default.properties")));
 		} catch (IOException e) {e.printStackTrace(); } 
 		
-		Test test = new Test();
-		test.setup(properties);
-		test.run(properties);
+		if(op) {
+			Test test = new Test();
+			test.setup(properties);
+			test.run(properties);
+		}
+		else {
+			
+			
+			
+			java.awt.EventQueue.invokeLater(()->{
+	            	GrammaticalEvolutionMainFrame f = new GrammaticalEvolutionMainFrame(Test.class,properties);
+	            	((Test)f.getExperiment()).fitnesscollOp.setFrame(f);
+	                f.setVisible(true);
+	            
+	        });
+		}
+		
 	}
 	
 }

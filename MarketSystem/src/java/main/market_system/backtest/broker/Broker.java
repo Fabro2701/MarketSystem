@@ -129,6 +129,13 @@ public class Broker {
 		return true;
 	}
 
+	public void clear() {
+		this.deals.clear();
+		this.deals=null;
+		this.closedTrades.clear();
+		this.closedTrades=null;
+	}
+	
 	public Position getPosition() {
 		return position;
 	}
@@ -147,4 +154,5 @@ public class Broker {
 	public int getCurrentIdx() {
 		return currentIdx;
 	}
+
 }

@@ -45,8 +45,11 @@ public class TradeWinFitnessOperator extends FitnessEvaluationOperator {
 		r = Math.sqrt(ss.getLongTradesWin()*ss.getShortTradesWin());
 		//r = (ss.getLongTradesWin()+ss.getShortTradesWin())/2d;
 		//r *= broker.getPosition().getBalance()*ss.getAvgProfit();
-		r *= ss.getnTrades();
+		//r *= ss.getnTrades();
+		r *= broker.getPosition().getBalance();
 		return (float) r;
+		//return (float) broker.getPosition().getBalance();
+
 	}
 
 }

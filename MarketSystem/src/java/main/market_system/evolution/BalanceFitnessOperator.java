@@ -34,6 +34,8 @@ public class BalanceFitnessOperator extends FitnessEvaluationOperator {
 		backtest.run(strat);
 		backtest.end();
 		
+		broker.clear();
+		
 		return (float) broker.getPosition().getBalance();
 	}
 

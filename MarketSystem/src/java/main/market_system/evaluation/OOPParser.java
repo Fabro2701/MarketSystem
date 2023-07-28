@@ -21,6 +21,7 @@ public class OOPParser{
 	}
 
 	public JSONObject parse(String code){
+		//System.out.println(code);
 		_string = code;
 		_tokenizer = new OOPTokenizer();
 		_tokenizer.init(code);

@@ -3,6 +3,7 @@ package market_system.evolution;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Properties;
 
 import market_system.backtest.broker.Broker;
@@ -51,11 +52,14 @@ public class Test extends Experiment{
 		initModule.addOperator(rinitOp);
 		
 		FitnessModule initFitnessModule = new FitnessModule(generalPopulation, properties,rnd);
-		FitnessEvaluationOperator fitnessInitOp = new TradeWinFitnessOperator(properties,rnd);
+		FitnessEvaluationOperator fitnessInitOp = new TradeWinFitnessOperator(properties,rnd,"C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1.csv");
 		initFitnessModule.addOperator(fitnessInitOp);
 		
 		CollectorModule fitnesscollModule = new CollectorModule(generalPopulation, properties,rnd);
 		fitnesscollOp = new FitnessCollectorOperator(properties,rnd);
+		fitnesscollOp.addValidationOps(Map.of("v2",new TradeWinFitnessOperator(properties,rnd,"C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1_2.csv"),
+											  "v3",new TradeWinFitnessOperator(properties,rnd,"C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1_3.csv"),
+											  "v4",new TradeWinFitnessOperator(properties,rnd,"C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1_4.csv")));
 		fitnesscollModule.addOperator(fitnesscollOp);
 
 		//loop
@@ -74,7 +78,7 @@ public class Test extends Experiment{
 		mutationModule.addOperator(mutationOp);
 		
 		FitnessModule fitnessModule = new FitnessModule(selectedPopulation, properties,rnd);
-		FitnessEvaluationOperator fitnessOp = new TradeWinFitnessOperator(properties,rnd);
+		TradeWinFitnessOperator fitnessOp = new TradeWinFitnessOperator(properties,rnd,"C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1.csv");
 		fitnessModule.addOperator(fitnessOp);
 		
 		JoinModule joinModule = new JoinModule(generalPopulation, properties, rnd, selectedPopulation);

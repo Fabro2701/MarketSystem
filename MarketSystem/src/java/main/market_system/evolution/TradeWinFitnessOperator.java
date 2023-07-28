@@ -17,9 +17,9 @@ import model.module.operator.fitness.FitnessEvaluationOperator;
 
 public class TradeWinFitnessOperator extends FitnessEvaluationOperator {
 	MarketData data;
-	public TradeWinFitnessOperator(Properties properties, Random rnd) {
+	public TradeWinFitnessOperator(Properties properties, Random rnd, String dataPath) {
 		super(properties, rnd);
-		data = new MarketData("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1.csv");
+		data = new MarketData(dataPath);
 		
 		// TODO Auto-generated constructor stub
 	}
@@ -45,8 +45,8 @@ public class TradeWinFitnessOperator extends FitnessEvaluationOperator {
 		r = Math.sqrt(ss.getLongTradesWin()*ss.getShortTradesWin());
 		//r = (ss.getLongTradesWin()+ss.getShortTradesWin())/2d;
 		//r *= broker.getPosition().getBalance()*ss.getAvgProfit();
-		//r *= ss.getnTrades();
-		r *= broker.getPosition().getBalance();
+		r *= ss.getnTrades();
+		//r *= broker.getPosition().getBalance()-50d;
 		return (float) r;
 		//return (float) broker.getPosition().getBalance();
 

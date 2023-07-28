@@ -1,0 +1,10 @@
+<INI> -> <S>';'.
+<S> -> <S><OP_AR>'('<EXP>')'|'('<EXP>')'.
+<EXP> -> '('<EXP>')'<OP_AR>'('<EXP>')' | <VALUE> | '('<VALUE>')'<OP_AR>'('<EXP>')'.
+<OP> -> '<'|'>'|'<='|'>='.
+<OP_RELA> -> '&&'|'||'.
+<OP_AR> -> '+'|'-'|'*'.
+<VALUE> -> <NUM>|<OBS>.
+<NUM> -> '(-'<N><N>'.'<N>')'|<N><N>'.'<N>.
+<N> -> 0|1|2|3|4|5|6|7|8|9.
+<OBS> -> 'Momentum10'|'Momentum50'|'Momentum200'|'Macd10_30'|'Macd50_100'|'Macd100_200'.

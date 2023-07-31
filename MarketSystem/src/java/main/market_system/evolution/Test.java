@@ -57,9 +57,7 @@ public class Test extends Experiment{
 		
 		CollectorModule fitnesscollModule = new CollectorModule(generalPopulation, properties,rnd);
 		fitnesscollOp = new FitnessCollectorOperator(properties,rnd);
-		fitnesscollOp.addValidationOps(Map.of("v2",new TradeWinFitnessOperator(properties,rnd,"C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1_2.csv"),
-											  "v3",new TradeWinFitnessOperator(properties,rnd,"C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1_3.csv"),
-											  "v4",new TradeWinFitnessOperator(properties,rnd,"C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1_4.csv")));
+		fitnesscollOp.addValidationOps(Map.of("v4",new TradeWinFitnessOperator(properties,rnd,"C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1_4.csv")));
 		fitnesscollModule.addOperator(fitnesscollOp);
 
 		//loop

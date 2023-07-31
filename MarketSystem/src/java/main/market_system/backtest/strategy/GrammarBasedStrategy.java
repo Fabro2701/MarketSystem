@@ -42,7 +42,6 @@ public class GrammarBasedStrategy extends Strategy {
 		map.putAll(indicators);
 		map.put("cd", candleData);
 		map.put("res", res);
-		//res.reset();
 		this.resultStrat(broker);
 		//this.valueStrat(broker);
 		
@@ -60,6 +59,7 @@ public class GrammarBasedStrategy extends Strategy {
 		else if(n<=-threshold)broker.sendFixedTimeOrder(ORDER_TYPE.SELL, 2d, 15L, null);
 	}
 	private void resultStrat(Broker broker) {
+		//res.reset();
 		try {
 			eval.evaluate(map);
 		} catch (IllegalArgumentException | JSONException | EvaluationException e) {
@@ -69,8 +69,9 @@ public class GrammarBasedStrategy extends Strategy {
 		int r=0;
 		if(res.bull>threshold)r++;
 		if(res.bear>threshold)r--;
-		if(r>0)broker.sendFixedTimeOrder(ORDER_TYPE.BUY, Math.min(res.bull/10d,5), 15L, null);
-		if(r<0)broker.sendFixedTimeOrder(ORDER_TYPE.SELL, Math.min(res.bear/10d,5), 15L, null);
+		long duration=20L;
+		if(r>0)broker.sendFixedTimeOrder(ORDER_TYPE.BUY, Math.min(res.bull/10d,5), duration, null);
+		if(r<0)broker.sendFixedTimeOrder(ORDER_TYPE.SELL, Math.min(res.bear/10d,5), duration, null);
 	}
 
 }

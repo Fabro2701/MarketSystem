@@ -9,6 +9,7 @@ import market_system.backtest.broker.order.BasicOrder;
 import market_system.backtest.broker.order.FixedTimeOrder;
 import market_system.backtest.broker.order.Order;
 import market_system.backtest.broker.order.Order.ORDER_TYPE;
+import market_system.backtest.broker.order.TPSLOrder;
 import market_system.backtest.data.CandleData;
 
 public class Broker {
@@ -46,7 +47,7 @@ public class Broker {
 		//pending.. max and min of the candle for update
 		//tp sl fixedtime ...
 		for(int i=0;i<this.openTrades.size();i++) {
-			if(this.openTrades.get(i).update(idx, date, candle.open)) {
+			if(this.openTrades.get(i).update(idx, date, candle)) {
 				
 				this.closeTrade(idx, this.openTrades.get(i), date, candle.open);
 				
@@ -110,6 +111,17 @@ public class Broker {
                 this.closedTrades.add(trade);
 	}
 
+	
+	public void closeTrades(ORDER_TYPE type) {//actually it needs to create a new order
+		for(int i=0;i<this.openTrades.size();i++) {
+			Trade t = this.openTrades.get(i);
+			if(t.getType()==type) {
+				this.closeTrade(this.currentIdx, t, this.currentDate, this.currentPrice);
+				this.openTrades.remove(i);
+				i--;
+			}
+		}
+	}
 	public boolean sendOrder(ORDER_TYPE type, double volume, String comment) {
 		if(volume<=0d) {
 			System.err.println("incorrect volume size "+volume);
@@ -125,6 +137,15 @@ public class Broker {
 			return false;
 		}
 		Order o = new FixedTimeOrder(oGens.getNext(), type, volume, currentDate, currentPrice, duration, comment);
+		pendingOrders.add(o);
+		return true;
+	}
+	public boolean sendTPSLOrder(ORDER_TYPE type, double volume, double tp, double sl, String comment) {
+		if(volume<=0d) {
+			System.err.println("incorrect volume size "+volume);
+			return false;
+		}
+		Order o = new TPSLOrder(oGens.getNext(), type, volume, currentDate, currentPrice, tp, sl,comment);
 		pendingOrders.add(o);
 		return true;
 	}
@@ -154,5 +175,6 @@ public class Broker {
 	public int getCurrentIdx() {
 		return currentIdx;
 	}
+
 
 }

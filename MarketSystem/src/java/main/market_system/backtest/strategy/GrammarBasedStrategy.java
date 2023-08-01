@@ -42,11 +42,12 @@ public class GrammarBasedStrategy extends Strategy {
 		map.putAll(indicators);
 		map.put("cd", candleData);
 		map.put("res", res);
-		this.resultStrat(broker);
+		double atr = indicators.get("atr");
+		this.resultStrat(broker,atr,idx, date, candleData);
 		//this.valueStrat(broker);
 		
 	}
-	private void valueStrat(Broker broker) {
+	private void valueStrat(Broker broker, double atr, CandleData candleData) {
 		double n=0d;
 		try {
 			n = (Double)eval.evaluate(map);
@@ -58,7 +59,7 @@ public class GrammarBasedStrategy extends Strategy {
 		if(n>=threshold)broker.sendFixedTimeOrder(ORDER_TYPE.BUY, 2d, 15L, null);
 		else if(n<=-threshold)broker.sendFixedTimeOrder(ORDER_TYPE.SELL, 2d, 15L, null);
 	}
-	private void resultStrat(Broker broker) {
+	private void resultStrat(Broker broker, double atr, int idx, LocalDateTime date, CandleData cd) {
 		//res.reset();
 		try {
 			eval.evaluate(map);
@@ -70,8 +71,15 @@ public class GrammarBasedStrategy extends Strategy {
 		if(res.bull>threshold)r++;
 		if(res.bear>threshold)r--;
 		long duration=20L;
-		if(r>0)broker.sendFixedTimeOrder(ORDER_TYPE.BUY, Math.min(res.bull/10d,5), duration, null);
-		if(r<0)broker.sendFixedTimeOrder(ORDER_TYPE.SELL, Math.min(res.bear/10d,5), duration, null);
+		double multAtr = 4d;
+		if(r>0) {
+			broker.closeTrades(ORDER_TYPE.SELL);
+			broker.sendTPSLOrder(ORDER_TYPE.BUY, Math.min(res.bull/100d,0.5), cd.close+atr*multAtr, cd.close-atr*multAtr, null);
+		}
+		if(r<0) {
+			broker.closeTrades(ORDER_TYPE.BUY);
+			broker.sendTPSLOrder(ORDER_TYPE.SELL, Math.min(res.bear/100d,0.5), cd.close-atr*multAtr, cd.close+atr*multAtr, null);
+		}
 	}
 
 }

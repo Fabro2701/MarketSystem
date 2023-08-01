@@ -1,11 +1,12 @@
 package market_system.backtest.broker;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 import market_system.backtest.broker.order.FixedTimeOrder;
 import market_system.backtest.broker.order.Order;
 import market_system.backtest.broker.order.Order.ORDER_TYPE;
+import market_system.backtest.broker.order.TPSLOrder;
+import market_system.backtest.data.CandleData;
 
 public class Trade {
 	int id,idx;
@@ -20,7 +21,7 @@ public class Trade {
 		this.openDate = openDate;
 		this.openPrice = currentPrice;
 	}
-	public boolean update(int idx, LocalDateTime date, double price) {
+	public boolean update(int idx, LocalDateTime date, CandleData cd) {
 		if(order instanceof FixedTimeOrder) {
 			if(idx-this.idx>=((FixedTimeOrder)order).getDuration()) {
 				return true;
@@ -30,6 +31,17 @@ public class Trade {
 			if(duration>((FixedTimeOrder)order).getDuration()) {
 				return true;
 			}*/
+		}
+		if(order instanceof TPSLOrder) {
+			TPSLOrder order = (TPSLOrder)this.order;
+			if(order.getType()==ORDER_TYPE.BUY) {
+				if(order.getTp()<=cd.high)return true;
+				if(order.getSl()>=cd.low)return true;
+			}
+			else {
+				if(order.getTp()>=cd.low)return true;
+				if(order.getSl()<=cd.high)return true;
+			}
 		}
 		return false;
 	}

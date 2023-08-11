@@ -22,7 +22,11 @@ import model.module.SelectionModule;
 import model.module.operator.Operator;
 import model.module.operator.collector.FitnessCollectorOperator;
 import model.module.operator.collector.SimilarityCollectorOperator;
-import model.module.operator.crossover.CrossoverOperator;
+import model.module.operator.crossover.HomologousCrossoverOperator;
+import model.module.operator.crossover.InheritedCrossoverOperator;
+import model.module.operator.crossover.LHSCrossoverOperator;
+import model.module.operator.crossover.OnePointCrossoverOperator;
+import model.module.operator.crossover.TwoPointCrossoverOperator;
 import model.module.operator.fitness.FitnessEvaluationOperator;
 import model.module.operator.initialization.InitializationOperator;
 import model.module.operator.join.JoinOperator;
@@ -65,10 +69,23 @@ public class Test extends Experiment{
 		
 		SelectionModule selectionModule = new SelectionModule(generalPopulation, properties, rnd, selectedPopulation);
 		SelectionOperator selectionOp = this.loadSelection(properties);
+		/*CombinedSelectionOperator selectionOp = new CombinedSelectionOperator(properties, rnd);
+		selectionOp.addOperator(new EliteSelectionOperator(properties, rnd))
+				   .addOperator(new LinearRankSelectionOperator(properties, rnd))
+				   .addOperator(new RouletteSelectionOperator(properties, rnd))
+				   .addOperator(new StochasticUniversalSamplingSelectionOperator(properties, rnd))
+				   .addOperator(new TournamentSelectionOperator(properties, rnd));*/
 		selectionModule.addOperator(selectionOp);
 		
+		
 		CrossoverModule crossoverModule = new CrossoverModule(selectedPopulation, properties, rnd);
-		CrossoverOperator crossoverOp = this.loadCrossover(properties);
+		//LHSCrossoverOperator crossoverOp = new LHSCrossoverOperator(properties, rnd, grammar);
+		//CrossoverOperator crossoverOp = this.loadCrossover(properties);
+		InheritedCrossoverOperator crossoverOp = new InheritedCrossoverOperator(properties, rnd);
+		crossoverOp.addOperator(new HomologousCrossoverOperator(properties, rnd))
+				   .addOperator(new LHSCrossoverOperator(properties, rnd, grammar))
+				   .addOperator(new OnePointCrossoverOperator(properties, rnd))
+				   .addOperator(new TwoPointCrossoverOperator(properties, rnd));
 		crossoverModule.addOperator(crossoverOp);
 		
 		MutationModule mutationModule = new MutationModule(selectedPopulation, properties, rnd);

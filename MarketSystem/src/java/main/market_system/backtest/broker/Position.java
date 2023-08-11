@@ -8,10 +8,12 @@ public class Position {
 	double volume;
 	POSITION_TYPE type;
 	double balance,equity;
+	double initial;
 	int dealsCursor;
 	
 	public Position(double balance) {
 		this.balance = balance;
+		this.initial = balance;
 		this.dealsCursor = 0;
 	}
 	public enum POSITION_TYPE{
@@ -42,6 +44,9 @@ public class Position {
 	}
 	public double getEquity() {
 		return equity;
+	}
+	public double getInitialBalance() {
+		return initial;
 	}
 	public void substractFromBalance(double d) {
 		this.balance -= d;

@@ -18,6 +18,8 @@ public class TradesStats extends BackTestStats{
 	double shortTradesWin,longTradesWin;
 	double largestProfit,largestLoss;
 	double avgProfit,avgLoss;
+	double sharpeRatio,calmarRatio;
+	double mdd;
 	public TradesStats() {
 		
 	}
@@ -47,11 +49,25 @@ public class TradesStats extends BackTestStats{
 		this.avgProfit=0d;
 		this.shortTradesWin=0d;
 		this.longTradesWin=0d;
-		if(nTrades!=0) {
+		this.sharpeRatio=0d;
+		this.calmarRatio=0d;
+		this.mdd=0d;
+		
+		int nlongTrades=0;
+		int nshortrades=0;
+		if(nTrades>1) {
 			double shortTradesWin=0,longTradesWin=0;
 			double profit;
+			double r = 0d;
+			double er = 0d, or = 0d;
+			double initial = broker.getPosition().getInitialBalance();
+			double max = initial;
+			double acc = 0d;
+			for(Deal deal:deals) er += (deal.getTrade().getType()==ORDER_TYPE.SELL?-1:1)*(deal.getClosePrice()-deal.getOpenPrice())/deal.getOpenPrice();
+			er /= nTrades;
 			for(Deal deal:deals) {
 				profit = deal.getProfit();
+				
 				if(profit>0d) {
 					avgProfit+=profit;
 					largestProfit = Math.max(largestProfit, profit);
@@ -60,14 +76,35 @@ public class TradesStats extends BackTestStats{
 					avgLoss+=profit;
 					largestLoss = Math.min(largestLoss, profit);
 				}
-				if(deal.getTrade().getType()==ORDER_TYPE.BUY)longTradesWin += profit>0d?1:0;
-				else shortTradesWin += profit>0d?1:0;
+				if(deal.getTrade().getType()==ORDER_TYPE.BUY) {
+					longTradesWin += profit>0d?1:0;
+					nlongTrades++;
+				}
+				else {
+					shortTradesWin += profit>0d?1:0;
+					nshortrades++;
+				}
+				
+				r = (deal.getTrade().getType()==ORDER_TYPE.SELL?-1:1)*(deal.getClosePrice()-deal.getOpenPrice())/deal.getOpenPrice();
+				or += Math.pow(r - er, 2);
+				acc += r;
+				max = Math.max(max, acc+initial);
+				mdd = Math.max(mdd, (max-(acc+initial))/max);
 			}
-			avgProfit /= nTrades;
-			avgLoss /= nTrades;
+			or = Math.sqrt(or/(nTrades-1));
 			
-			this.longTradesWin = longTradesWin/nTrades;
-			this.shortTradesWin = shortTradesWin/nTrades;
+			this.sharpeRatio = er/or;
+			this.calmarRatio = mdd!=0?er/mdd:0;
+			
+			this.longTradesWin = nlongTrades>0?longTradesWin/nlongTrades:0;
+			this.shortTradesWin = nshortrades>0?shortTradesWin/nshortrades:0;
+			
+			if(longTradesWin+shortTradesWin>0) {
+				avgProfit /= (longTradesWin+shortTradesWin);
+				avgLoss /= nTrades-(longTradesWin+shortTradesWin);
+			}
+			
+			
 		}
 		
 		if(this.metricsPanel!=null)metricsPanel.update(null,null,deals, null);
@@ -95,5 +132,14 @@ public class TradesStats extends BackTestStats{
 	}
 	public double getAvgLoss() {
 		return avgLoss;
+	}
+	public double getSharpeRatio() {
+		return sharpeRatio;
+	}
+	public double getCalmarRatio() {
+		return calmarRatio;
+	}
+	public double getMaximumDrawdown() {
+		return mdd;
 	}
 }

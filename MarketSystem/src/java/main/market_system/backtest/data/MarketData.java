@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -20,8 +21,11 @@ import java.util.Properties;
 public class MarketData extends ArrayList<CandleData>{
 	Map<String,ArrayList<Double>>indicators;
 	ArrayList<LocalDateTime>dates;
+	
 	private MarketData() {
 		super();
+		indicators = new HashMap<>();
+		dates = new ArrayList<>();
 	}
 	public MarketData(String filename) {
 		this(filename, defaultProperties);
@@ -78,7 +82,6 @@ public class MarketData extends ArrayList<CandleData>{
 		defaultProperties.put("delimiter", ",");
 		defaultProperties.put("date_format", "yyyy.MM.dd HH:mm");
 		defaultProperties.put("capacity", "0");
-		//pending columns order inluding the indicators reading
 		
 	}
 	
@@ -92,6 +95,24 @@ public class MarketData extends ArrayList<CandleData>{
 			map.put(e.getKey(), e.getValue().get(i));
 		}
 	}
+	public List<MarketData>split(int n){
+		List<MarketData>ds = new ArrayList<>();
+		
+		int m = this.size()/n;
+		for(int i=0;i<n;i++) {
+			MarketData d = new MarketData();
+			for(int j=m*i;j<m*(i+1);j++) {
+				d.add(this.get(j));
+				d.dates.add(this.dates.get(j));
+				for(String k:this.indicators.keySet()) {
+					d.indicators.computeIfAbsent(k, a->new ArrayList<>()).add(this.indicators.get(k).get(j));
+				}
+			}	
+			ds.add(d);
+		}
+		
+		return ds;
+	}
 	
 	public LocalDateTime getDate(int i) {
 		return this.dates.get(i);
@@ -100,6 +121,7 @@ public class MarketData extends ArrayList<CandleData>{
 	
 	public static void main(String arg[]) {
 		MarketData m = new MarketData("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1.csv");
+		List<MarketData> ds = m.split(4);
 		/*
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		Duration duration = Duration.between(LocalDateTime.parse("2010-01-01 15:30:00", formatter), 

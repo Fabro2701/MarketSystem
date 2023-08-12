@@ -3,10 +3,12 @@ package market_system.evolution;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
 import market_system.backtest.broker.Broker;
+import market_system.backtest.data.MarketData;
 import model.Experiment;
 import model.algorithm.AbstractPipeline;
 import model.algorithm.AbstractSearchAlgorithm;
@@ -16,6 +18,7 @@ import model.module.CollectorModule;
 import model.module.CrossoverModule;
 import model.module.FitnessModule;
 import model.module.InitializationModule;
+import model.module.InterleavedFitnessModule;
 import model.module.JoinModule;
 import model.module.MutationModule;
 import model.module.SelectionModule;
@@ -56,7 +59,8 @@ public class Test extends Experiment{
 		initModule.addOperator(rinitOp);
 		
 		FitnessModule initFitnessModule = new FitnessModule(generalPopulation, properties,rnd);
-		FitnessEvaluationOperator fitnessInitOp = new TradeWinFitnessOperator(properties,rnd,"C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1.csv");
+		MarketData data = new MarketData("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1.csv");
+		FitnessEvaluationOperator fitnessInitOp = new TradeWinFitnessOperator(properties,rnd,data);
 		initFitnessModule.addOperator(fitnessInitOp);
 		
 		CollectorModule fitnesscollModule = new CollectorModule(generalPopulation, properties,rnd);
@@ -92,9 +96,12 @@ public class Test extends Experiment{
 		MutationOperator mutationOp = this.loadMutation(properties);
 		mutationModule.addOperator(mutationOp);
 		
-		FitnessModule fitnessModule = new FitnessModule(selectedPopulation, properties,rnd);
-		TradeWinFitnessOperator fitnessOp = new TradeWinFitnessOperator(properties,rnd,"C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1.csv");
-		fitnessModule.addOperator(fitnessOp);
+		//FitnessModule fitnessModule = new FitnessModule(selectedPopulation, properties,rnd);//selectedPopulation beacuse generalpop are already evaluated
+		//TradeWinFitnessOperator fitnessOp = new TradeWinFitnessOperator(properties,rnd,"C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1.csv");
+		//fitnessModule.addOperator(fitnessOp);
+		List<MarketData> ds = data.split(Integer.parseInt(properties.getProperty("split", "10")));
+		InterleavedFitnessModule fitnessModule = new InterleavedFitnessModule(generalPopulation, properties,rnd);
+		for(var d:ds)fitnessModule.addOperator(new TradeWinFitnessOperator(properties,rnd,d));
 		
 		JoinModule joinModule = new JoinModule(generalPopulation, properties, rnd, selectedPopulation);
 		JoinOperator joinOp = this.loadJoin(properties);

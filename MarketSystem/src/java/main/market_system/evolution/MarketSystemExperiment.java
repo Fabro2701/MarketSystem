@@ -10,15 +10,17 @@ import java.util.Properties;
 import market_system.backtest.broker.Broker;
 import market_system.backtest.data.MarketData;
 import model.Experiment;
+import model.Util.Pair;
 import model.algorithm.AbstractPipeline;
 import model.algorithm.AbstractSearchAlgorithm;
 import model.algorithm.SimplePipeline;
 import model.grammar.AbstractGrammar;
+import model.module.AdaptiveFitnessModule;
 import model.module.CollectorModule;
 import model.module.CrossoverModule;
 import model.module.FitnessModule;
+import model.module.GrammarModule;
 import model.module.InitializationModule;
-import model.module.InterleavedFitnessModule;
 import model.module.JoinModule;
 import model.module.MutationModule;
 import model.module.SelectionModule;
@@ -31,6 +33,8 @@ import model.module.operator.crossover.LHSCrossoverOperator;
 import model.module.operator.crossover.OnePointCrossoverOperator;
 import model.module.operator.crossover.TwoPointCrossoverOperator;
 import model.module.operator.fitness.FitnessEvaluationOperator;
+import model.module.operator.grammar.GrammarOperator;
+import model.module.operator.grammar.ModuleGrammarOperator;
 import model.module.operator.initialization.InitializationOperator;
 import model.module.operator.join.JoinOperator;
 import model.module.operator.mutation.MutationOperator;
@@ -38,17 +42,19 @@ import model.module.operator.selection.SelectionOperator;
 import view.GrammaticalEvolutionMainFrame;
 
 
-public class Test extends Experiment{
-	public Test(AbstractSearchAlgorithm algo) {
+public class MarketSystemExperiment extends Experiment{
+	public MarketSystemExperiment(AbstractSearchAlgorithm algo) {
 		super(algo);
 	}
-	public Test() {
+	public MarketSystemExperiment() {
 		super();
 	}
 	
 	FitnessCollectorOperator fitnesscollOp;
 	@Override
 	public void setup(Properties properties) {
+		MarketData data = new MarketData("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1.csv");
+		
 		AbstractPipeline initPipeline = new SimplePipeline();
 		
 		AbstractGrammar grammar = this.loadGrammar(properties);
@@ -59,7 +65,6 @@ public class Test extends Experiment{
 		initModule.addOperator(rinitOp);
 		
 		FitnessModule initFitnessModule = new FitnessModule(generalPopulation, properties,rnd);
-		MarketData data = new MarketData("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1.csv");
 		FitnessEvaluationOperator fitnessInitOp = new TradeWinFitnessOperator(properties,rnd,data);
 		initFitnessModule.addOperator(fitnessInitOp);
 		
@@ -99,15 +104,27 @@ public class Test extends Experiment{
 		//FitnessModule fitnessModule = new FitnessModule(selectedPopulation, properties,rnd);//selectedPopulation beacuse generalpop are already evaluated
 		//TradeWinFitnessOperator fitnessOp = new TradeWinFitnessOperator(properties,rnd,"C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1.csv");
 		//fitnessModule.addOperator(fitnessOp);
-		List<MarketData> ds = data.split(Integer.parseInt(properties.getProperty("split", "10")));
-		InterleavedFitnessModule fitnessModule = new InterleavedFitnessModule(generalPopulation, properties,rnd);
+		
+		/*InterleavedFitnessModule fitnessModule = new InterleavedFitnessModule(generalPopulation, properties,rnd);
+		List<MarketData> ds = data.split(Integer.parseInt(properties.getProperty("interleaved_split", "10")));
+		for(var d:ds)fitnessModule.addOperator(new TradeWinFitnessOperator(properties,rnd,d));*/
+		
+		AdaptiveFitnessModule fitnessModule = new AdaptiveFitnessModule(generalPopulation, properties,rnd);
+		Pair<MarketData,MarketData> dp = data.split(Double.parseDouble(properties.getProperty("adaptive_init", "0.3")));
+		fitnessModule.setInitOp(new TradeWinFitnessOperator(properties,rnd,dp.first));
+		List<MarketData> ds = dp.second.split(Integer.parseInt(properties.getProperty("adaptive_split", "10")));
 		for(var d:ds)fitnessModule.addOperator(new TradeWinFitnessOperator(properties,rnd,d));
+		
 		
 		JoinModule joinModule = new JoinModule(generalPopulation, properties, rnd, selectedPopulation);
 		JoinOperator joinOp = this.loadJoin(properties);
 		joinModule.addOperator(joinOp);
 		
-		CollectorModule simicollModule = new CollectorModule(generalPopulation, properties,rnd);
+		GrammarModule moduleGrammarModule = new GrammarModule(generalPopulation, properties, rnd, grammar);
+		GrammarOperator moduleGrammarOp = new ModuleGrammarOperator(properties, rnd, fitnessInitOp, rinitOp);
+		moduleGrammarModule.addOperator(moduleGrammarOp);
+		
+		CollectorModule simicollModule = new CollectorModule(generalPopulation, properties, rnd);
 		Operator simicollOp = new SimilarityCollectorOperator(properties,rnd);
 		simicollModule.addOperator(simicollOp);
 
@@ -123,12 +140,17 @@ public class Test extends Experiment{
 		loopPipeline.addModule(joinModule);
 		loopPipeline.addModule(fitnesscollModule);
 		loopPipeline.addModule(simicollModule);
+		loopPipeline.addModule(moduleGrammarModule);
 		
 		this.algorithm.setInitPipeline(initPipeline);
 		this.algorithm.setLoopPipeline(loopPipeline);
 	}
+
 	public static void main(String args[]) {
-		boolean op=false;
+		runGUI();
+		//run();
+	}
+	public static void run() {
 		Broker.debug=false;
 		
 		Properties properties = new Properties();
@@ -136,22 +158,29 @@ public class Test extends Experiment{
 			properties.load(new FileInputStream(new File("resources/evolution/default.properties")));
 		} catch (IOException e) {e.printStackTrace(); } 
 		
-		if(op) {
-			Test test = new Test();
-			test.setup(properties);
-			test.run(properties);
-		}
-		else {
-			
-			
-			
-			java.awt.EventQueue.invokeLater(()->{
-	            	GrammaticalEvolutionMainFrame f = new GrammaticalEvolutionMainFrame(Test.class,properties);
-	            	((Test)f.getExperiment()).fitnesscollOp.setFrame(f);
-	                f.setVisible(true);
-	            
-	        });
-		}
+		
+		MarketSystemExperiment test = new MarketSystemExperiment();
+		test.setup(properties);
+		test.run(properties);
+		
+		
+		
+	}
+	public static void runGUI() {
+		Broker.debug=false;
+		
+		Properties properties = new Properties();
+		try { 
+			properties.load(new FileInputStream(new File("resources/evolution/default.properties")));
+		} catch (IOException e) {e.printStackTrace(); } 
+
+		java.awt.EventQueue.invokeLater(()->{
+            	GrammaticalEvolutionMainFrame f = new GrammaticalEvolutionMainFrame(MarketSystemExperiment.class,properties);
+            	((MarketSystemExperiment)f.getExperiment()).fitnesscollOp.setFrame(f);
+                f.setVisible(true);
+            
+        });
+		
 		
 	}
 	

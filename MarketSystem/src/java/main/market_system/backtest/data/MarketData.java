@@ -17,6 +17,8 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Properties;
 
+import model.Util.Pair;
+
 
 public class MarketData extends ArrayList<CandleData>{
 	Map<String,ArrayList<Double>>indicators;
@@ -113,7 +115,24 @@ public class MarketData extends ArrayList<CandleData>{
 		
 		return ds;
 	}
-	
+
+	public Pair<MarketData,MarketData>split(double n){
+		MarketData d1 = new MarketData();
+		MarketData d2 = new MarketData();		
+		
+		for(int i=0;i<this.size();i++) {
+			MarketData d = null;
+			if(i<this.size()*n)d = d1;
+			else d = d2;
+			
+			d.add(this.get(i));
+			d.dates.add(this.dates.get(i));
+			for(String k:this.indicators.keySet()) {
+				d.indicators.computeIfAbsent(k, a->new ArrayList<>()).add(this.indicators.get(k).get(i));
+			}
+		}
+		return new Pair<MarketData,MarketData>(d1,d2);
+	}
 	public LocalDateTime getDate(int i) {
 		return this.dates.get(i);
 	}

@@ -9,21 +9,22 @@ public class Deal {
 	double volume,openPrice,closePrice,profit;
 	LocalDateTime openTime, closeTime;
 	Trade trade;
-	public Deal(int id, int idx, LocalDateTime date, double price, Trade trade) {
+	public Deal(int id, int idx, LocalDateTime date, double ask, double bid, Trade trade) {
 		this.id = id;
 		this.iniIdx = trade.getIdx();
 		this.endIdx = idx;
 		this.closeTime = date;
-		this.closePrice = price;
 		this.volume = trade.getVolume();
 		this.openTime = trade.getOpenDate();
 		this.openPrice = trade.getOpenPrice();
 		this.trade = trade;
 		
 		if(trade.getType()==ORDER_TYPE.BUY) {
+			this.closePrice = bid;
 			this.profit = (closePrice-openPrice)*volume;
 		}
 		else {
+			this.closePrice = ask;
 			this.profit = (openPrice-closePrice)*volume;
 		}
 		

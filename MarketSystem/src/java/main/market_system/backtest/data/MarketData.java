@@ -46,11 +46,12 @@ public class MarketData extends ArrayList<CandleData>{
 		File file = new File(filename);
 		String[] values;
 		
+		int candleIndices = 7;
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_16))) {
 		    String line;
 		    String header[] = br.readLine().split(delimiter);
-		    int inds=header.length-5;
-		    for(int i=0;i<inds;i++)this.indicators.put(header[i+5], new ArrayList<>());
+		    int inds=header.length-candleIndices;
+		    for(int i=0;i<inds;i++)this.indicators.put(header[i+candleIndices], new ArrayList<>());
 		    
 		    while ((line = br.readLine()) != null) {
 		    	values = line.split(delimiter);
@@ -62,15 +63,17 @@ public class MarketData extends ArrayList<CandleData>{
 		    	CandleData cd = new CandleData(Double.parseDouble(values[1]), 
 		    								   Double.parseDouble(values[2]), 
 		    								   Double.parseDouble(values[3]), 
-		    								   Double.parseDouble(values[4]));
+		    								   Double.parseDouble(values[4]), 
+		    								   Double.parseDouble(values[5]), 
+		    								   Double.parseDouble(values[6]));
 		    	this.add(cd);
 		    	
 		    	for(int i=0;i<inds;i++) {
-		    		this.indicators.get(header[5+i]).add(Double.parseDouble(values[5+i]));
+		    		this.indicators.get(header[candleIndices+i]).add(Double.parseDouble(values[candleIndices+i]));
 		    	}
 		    }
 		    
-		    System.out.println("File read - "+Arrays.toString(header));
+		    System.out.println("File "+file.getName()+" read -"+this.size()+"- "+Arrays.toString(header));
 		} catch (IOException e) {
 			System.err.println("Error reading data from: "+filename);
 			e.printStackTrace();
@@ -139,7 +142,7 @@ public class MarketData extends ArrayList<CandleData>{
 	
 	
 	public static void main(String arg[]) {
-		MarketData m = new MarketData("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1.csv");
+		MarketData m = new MarketData("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1_m.csv");
 		List<MarketData> ds = m.split(4);
 		/*
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

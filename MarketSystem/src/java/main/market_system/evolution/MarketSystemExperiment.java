@@ -53,7 +53,7 @@ public class MarketSystemExperiment extends Experiment{
 	FitnessCollectorOperator fitnesscollOp;
 	@Override
 	public void setup(Properties properties) {
-		MarketData data = new MarketData("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1.csv");
+		MarketData data = new MarketData("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1_m.csv");
 		
 		AbstractPipeline initPipeline = new SimplePipeline();
 		
@@ -70,7 +70,8 @@ public class MarketSystemExperiment extends Experiment{
 		
 		CollectorModule fitnesscollModule = new CollectorModule(generalPopulation, properties,rnd);
 		fitnesscollOp = new FitnessCollectorOperator(properties,rnd);
-		fitnesscollOp.addValidationOps(Map.of("v4",new TradeWinFitnessOperator(properties,rnd,"C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1_4.csv")));
+		fitnesscollOp.addValidationOps(Map.of("v4",new TradeWinFitnessOperator(properties,rnd,"C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1_t1.csv")));
+		fitnesscollOp.addValidationOps(Map.of("v4",new TradeWinFitnessOperator(properties,rnd,"C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1_t2.csv")));
 		fitnesscollModule.addOperator(fitnesscollOp);
 
 		//loop

@@ -16,6 +16,7 @@ public class RenderConstants {
 	public static Color candleBorderColor = Color.BLACK;
 	
 	public static Stroke linechartStroke = new BasicStroke(2);
+	public static Stroke thinlinechartStroke = new BasicStroke(0.2f);
 	public static Color linechartColor = Color.BLUE;
 	protected static double candleWidth = 7d; 
 }

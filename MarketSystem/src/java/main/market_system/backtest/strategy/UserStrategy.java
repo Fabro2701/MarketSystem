@@ -11,10 +11,11 @@ public class UserStrategy extends Strategy {
 
 	@Override
 	public void onTick(int idx, LocalDateTime date, CandleData cd, Map<String, Double> indicators, Broker broker) {
-		/*if(idx==3) {
-			broker.sendTPSLOrder(ORDER_TYPE.SELL, 1d, cd.close-0.00900d, cd.close+0.00900d, null);
+		if(idx==4) {
+			double atr = indicators.get("atr");
+			broker.sendTPSLOrder(ORDER_TYPE.BUY, 0.1d, cd.ask+atr*3.0, cd.ask-atr*3.0, String.valueOf(atr));
 		}
-		if(idx==10) {
+		/*if(idx==10) {
 			//broker.sendFixedTimeOrder(ORDER_TYPE.SELL, 1d, 10L, null);
 		}
 		if(idx==100) {

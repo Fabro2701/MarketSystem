@@ -14,7 +14,7 @@ import market_system.backtest.data.CandleData;
 
 public class Broker {
 	LocalDateTime currentDate;
-	double currentPrice;
+	double currentPrice,currentAsk,currentBid;
 	int currentIdx;
 	Position position;
 	List<Order>closedOrders,pendingOrders;
@@ -49,7 +49,7 @@ public class Broker {
 		for(int i=0;i<this.openTrades.size();i++) {
 			if(this.openTrades.get(i).update(idx, date, candle)) {
 				
-				this.closeTrade(idx, this.openTrades.get(i), date, candle.open);
+				this.closeTrade(idx, this.openTrades.get(i), date, candle.ask, candle.bid);//tp sl orders actually should close at one of those points
 				
 				this.openTrades.remove(i);
 				i--;
@@ -81,13 +81,15 @@ public class Broker {
 		currentDate = date;
 		currentPrice = candle.close;
 		currentIdx = idx;
+		currentAsk = candle.ask;
+		currentBid = candle.bid;
 	}
 	
 
 	public void onEnd() {
 		//close everything...
 		for(int i=0;i<this.openTrades.size();i++) {
-			closeTrade(currentIdx, this.openTrades.get(i),this.currentDate,this.currentPrice);
+			closeTrade(currentIdx, this.openTrades.get(i),this.currentDate, this.currentAsk, this.currentBid);
 			this.openTrades.remove(i);
 			i--;
 		}
@@ -101,9 +103,9 @@ public class Broker {
 		
 		if(debug)System.out.println("Final balance: "+position.getEquity());
 	}
-	private void closeTrade(int idx, Trade trade, LocalDateTime date, double price) {
-		Deal deal = new Deal(dGens.getNext(), idx, date, price, trade);
-		if(debug)System.out.printf("Trade closed at %f %s profit: %f\n", price, date.toString(),deal.profit);
+	private void closeTrade(int idx, Trade trade, LocalDateTime date, double ask, double bid) {
+		Deal deal = new Deal(dGens.getNext(), idx, date, ask, bid, trade);
+		if(debug)System.out.printf("Trade closed at %f %s profit: %f\n", deal.closePrice, date.toString(),deal.profit);
 		
 		this.deals.add(deal);
 		position.addToBalance(deal.getOpenPrice()*deal.getVolume()+deal.profit);
@@ -116,7 +118,7 @@ public class Broker {
 		for(int i=0;i<this.openTrades.size();i++) {
 			Trade t = this.openTrades.get(i);
 			if(t.getType()==type) {
-				this.closeTrade(this.currentIdx, t, this.currentDate, this.currentPrice);
+				this.closeTrade(this.currentIdx, t, this.currentDate, this.currentAsk, this.currentBid);
 				this.openTrades.remove(i);
 				i--;
 			}
@@ -127,7 +129,7 @@ public class Broker {
 			System.err.println("incorrect volume size "+volume);
 			return false;
 		}
-		Order o = new BasicOrder(oGens.getNext(), type, volume, currentDate, currentPrice, comment);
+		Order o = new BasicOrder(oGens.getNext(), type, volume, currentDate, type==ORDER_TYPE.BUY?currentAsk:currentBid, comment);
 		pendingOrders.add(o);
 		return true;
 	}
@@ -136,7 +138,7 @@ public class Broker {
 			System.err.println("incorrect volume size "+volume);
 			return false;
 		}
-		Order o = new FixedTimeOrder(oGens.getNext(), type, volume, currentDate, currentPrice, duration, comment);
+		Order o = new FixedTimeOrder(oGens.getNext(), type, volume, currentDate, type==ORDER_TYPE.BUY?currentAsk:currentBid, duration, comment);
 		pendingOrders.add(o);
 		return true;
 	}
@@ -145,7 +147,7 @@ public class Broker {
 			System.err.println("incorrect volume size "+volume);
 			return false;
 		}
-		Order o = new TPSLOrder(oGens.getNext(), type, volume, currentDate, currentPrice, tp, sl,comment);
+		Order o = new TPSLOrder(oGens.getNext(), type, volume, currentDate, type==ORDER_TYPE.BUY?currentAsk:currentBid, tp, sl,comment);
 		pendingOrders.add(o);
 		return true;
 	}

@@ -7,7 +7,7 @@ import market_system.backtest.broker.Broker;
 public class FullStats extends BackTestStats{
 
 	@Override
-	public void onTick(LocalDateTime date, Broker broker) {
+	public void onTick(int idx, LocalDateTime date, Broker broker) {
 		// TODO Auto-generated method stub
 		
 	}

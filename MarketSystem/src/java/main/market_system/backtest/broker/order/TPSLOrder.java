@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 public class TPSLOrder extends Order {
 	double tp, sl;
+	public int r;//-1 sl   1 tp
 	public TPSLOrder(int id, ORDER_TYPE type, double volume, LocalDateTime openDate, double openPrice, double tp, double sl, String comment) {
 		super(id, type, volume, openDate, openPrice, comment);
 		this.tp=tp;

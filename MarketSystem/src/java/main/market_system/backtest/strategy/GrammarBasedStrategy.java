@@ -42,7 +42,7 @@ public class GrammarBasedStrategy extends Strategy {
 		map.putAll(indicators);
 		map.put("cd", candleData);
 		map.put("res", res);
-		double atr = indicators.get("atr");
+		double atr = indicators.get("atr_0");
 		this.resultStrat(broker,atr,idx, date, candleData);
 		//this.valueStrat(broker);
 		
@@ -74,11 +74,11 @@ public class GrammarBasedStrategy extends Strategy {
 		double multAtr = 4d;
 		if(r>0) {
 			broker.closeTrades(ORDER_TYPE.SELL);
-			broker.sendTPSLOrder(ORDER_TYPE.BUY, Math.min(res.bull/100d,0.5), cd.close+atr*multAtr, cd.close-atr*multAtr, null);
+			broker.sendTPSLOrder(ORDER_TYPE.BUY, Math.min(res.bull/100d,0.5), cd.ask+atr*3.0, cd.ask-atr*3.0, null);
 		}
 		if(r<0) {
 			broker.closeTrades(ORDER_TYPE.BUY);
-			broker.sendTPSLOrder(ORDER_TYPE.SELL, Math.min(res.bear/100d,0.5), cd.close-atr*multAtr, cd.close+atr*multAtr, null);
+			broker.sendTPSLOrder(ORDER_TYPE.SELL, Math.min(res.bear/100d,0.5), cd.bid-atr*3.0, cd.bid+atr*3.0, null);
 		}
 	}
 

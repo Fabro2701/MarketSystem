@@ -3,6 +3,7 @@ package market_system.backtest.broker;
 import java.time.LocalDateTime;
 
 import market_system.backtest.broker.order.Order.ORDER_TYPE;
+import market_system.backtest.broker.order.TPSLOrder;
 
 public class Deal {
 	int id,iniIdx,endIdx;
@@ -19,14 +20,32 @@ public class Deal {
 		this.openPrice = trade.getOpenPrice();
 		this.trade = trade;
 		
-		if(trade.getType()==ORDER_TYPE.BUY) {
-			this.closePrice = bid;
-			this.profit = (closePrice-openPrice)*volume;
+		if(trade.order instanceof TPSLOrder) {
+			TPSLOrder no = (TPSLOrder)trade.order;
+			if(no.r==1) {//tp
+				this.closePrice = no.getTp();
+			}
+			else {
+				this.closePrice = no.getSl();
+			}
+			if(trade.getType()==ORDER_TYPE.BUY) {
+				this.profit = (closePrice-openPrice)*volume;
+			}
+			else {
+				this.profit = -(closePrice-openPrice)*volume;
+			}
 		}
 		else {
-			this.closePrice = ask;
-			this.profit = (openPrice-closePrice)*volume;
+			if(trade.getType()==ORDER_TYPE.BUY) {
+				this.closePrice = bid;
+				this.profit = (closePrice-openPrice)*volume;
+			}
+			else {
+				this.closePrice = ask;
+				this.profit = -(closePrice-openPrice)*volume;
+			}
 		}
+		
 		
 		
 	}

@@ -5,20 +5,19 @@ import java.util.List;
 import market_system.backtest.broker.order.Order.ORDER_TYPE;
 
 public class Position {
-	double volume;
-	POSITION_TYPE type;
 	double balance,equity;
 	double initial;
-	int dealsCursor;
+	
+	double maxEquity;
+	double mdd;
 	
 	public Position(double balance) {
 		this.balance = balance;
 		this.initial = balance;
-		this.dealsCursor = 0;
+		this.maxEquity = 0d;
+		this.mdd = 0d;
 	}
-	public enum POSITION_TYPE{
-		LONG,SHORT;
-	}
+
 
 	public void update(List<Trade> trades, List<Deal>deals,double close) {
 		
@@ -29,15 +28,13 @@ public class Position {
 			double volume = trade.getVolume();
 			ORDER_TYPE type = trade.getType();
 			
-			if(type==ORDER_TYPE.BUY)equity += (openPrice+(close-openPrice))*volume;
-			else equity += (openPrice+(openPrice-close))*volume;
+			if(type==ORDER_TYPE.BUY)equity += ((close-openPrice))*volume;
+			else equity += ((openPrice-close))*volume;
 		}
 		equity += this.balance;
 		
-		
-		/*for(int i=dealsCursor;i<deals.size();i++) {
-			balance += deals.get(i).getProfit();
-		}dealsCursor=deals.size();*/
+		maxEquity = Math.max(maxEquity, equity);
+		if(equity<maxEquity) mdd = Math.max(mdd, (maxEquity-equity)/maxEquity);
 	}
 	public double getBalance() {
 		return this.balance;
@@ -53,6 +50,9 @@ public class Position {
 	}
 	public void addToBalance(double d) {
 		this.balance += d;
+	}
+	public double getMaximumDrawdown() {
+		return mdd;
 	}
 	
 	@Override

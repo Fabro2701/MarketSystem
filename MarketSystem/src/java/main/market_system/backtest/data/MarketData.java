@@ -96,45 +96,40 @@ public class MarketData extends ArrayList<CandleData>{
 	 * @param i
 	 */
 	public void fillIndicators(Map<String, Double>map, int i) {
+		int windowSize = 3;
 		for(Entry<String, ArrayList<Double>> e:this.indicators.entrySet()) {
-			map.put(e.getKey(), e.getValue().get(i));
+			for(int j=0;j<windowSize;j++) {
+				map.put(e.getKey()+"_"+j, e.getValue().get(i-(i>=j?j:0)));
+			}
 		}
 	}
 	public List<MarketData>split(int n){
+		
+		double m = 1.0/n;
+		double arr[] = new double[n];
+		for(int i=0;i<n;i++)arr[i] = m;
+		
+		return this.split(arr);
+	}
+	public List<MarketData>split(double ...p){
 		List<MarketData>ds = new ArrayList<>();
 		
-		int m = this.size()/n;
-		for(int i=0;i<n;i++) {
+		int cursor=0;
+		for(int i=0;i<p.length;i++) {
+			int m = (int) (this.size()*p[i]);
 			MarketData d = new MarketData();
-			for(int j=m*i;j<m*(i+1);j++) {
-				d.add(this.get(j));
-				d.dates.add(this.dates.get(j));
+			for(int j=0;j<m&&j+cursor<this.size();j++) {
+				d.add(this.get(j+cursor));
+				d.dates.add(this.dates.get(j+cursor));
 				for(String k:this.indicators.keySet()) {
-					d.indicators.computeIfAbsent(k, a->new ArrayList<>()).add(this.indicators.get(k).get(j));
+					d.indicators.computeIfAbsent(k, a->new ArrayList<>()).add(this.indicators.get(k).get(j+cursor));
 				}
+				cursor++;
 			}	
 			ds.add(d);
 		}
 		
 		return ds;
-	}
-
-	public Pair<MarketData,MarketData>split(double n){
-		MarketData d1 = new MarketData();
-		MarketData d2 = new MarketData();		
-		
-		for(int i=0;i<this.size();i++) {
-			MarketData d = null;
-			if(i<this.size()*n)d = d1;
-			else d = d2;
-			
-			d.add(this.get(i));
-			d.dates.add(this.dates.get(i));
-			for(String k:this.indicators.keySet()) {
-				d.indicators.computeIfAbsent(k, a->new ArrayList<>()).add(this.indicators.get(k).get(i));
-			}
-		}
-		return new Pair<MarketData,MarketData>(d1,d2);
 	}
 	public LocalDateTime getDate(int i) {
 		return this.dates.get(i);
@@ -142,8 +137,9 @@ public class MarketData extends ArrayList<CandleData>{
 	
 	
 	public static void main(String arg[]) {
-		MarketData m = new MarketData("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1_m.csv");
+		MarketData m = new MarketData("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_M15_m.csv");
 		List<MarketData> ds = m.split(4);
+		int a=0;
 		/*
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		Duration duration = Duration.between(LocalDateTime.parse("2010-01-01 15:30:00", formatter), 

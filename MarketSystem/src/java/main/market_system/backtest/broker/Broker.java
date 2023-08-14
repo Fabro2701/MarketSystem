@@ -42,6 +42,7 @@ public class Broker {
 		
 	}
 	public void onTick(int idx, LocalDateTime date, CandleData candle, Map<String, Double> indicatorsMap) {
+		//if(idx%50==0)System.out.println("Time: "+date+"  |  "+position);
 		//System.out.println("Time: "+date+"  |  "+position);
 		
 		//pending.. max and min of the candle for update
@@ -67,7 +68,7 @@ public class Broker {
 			}
 			//trade opens at o.getOpenPrice()
 			Trade t = new Trade(tGens.getNext(), idx, date, o.getOpenPrice(), o.getVolume(), o);
-			position.substractFromBalance(o.getVolume()*o.getOpenPrice());
+			//position.substractFromBalance(o.getVolume()*o.getOpenPrice());
 			this.openTrades.add(t);
 			this.closedOrders.add(o);
 			if(debug)System.out.println("Order opened >>> "+o.toString()+" Available balance: "+balance);
@@ -108,9 +109,10 @@ public class Broker {
 		if(debug)System.out.printf("Trade closed at %f %s profit: %f\n", deal.closePrice, date.toString(),deal.profit);
 		
 		this.deals.add(deal);
-		position.addToBalance(deal.getOpenPrice()*deal.getVolume()+deal.profit);
-                
-                this.closedTrades.add(trade);
+		//position.addToBalance(deal.getOpenPrice()*deal.getVolume()+deal.profit);
+		position.addToBalance(deal.profit);
+
+		this.closedTrades.add(trade);
 	}
 
 	
@@ -145,6 +147,14 @@ public class Broker {
 	public boolean sendTPSLOrder(ORDER_TYPE type, double volume, double tp, double sl, String comment) {
 		if(volume<=0d) {
 			System.err.println("incorrect volume size "+volume);
+			return false;
+		}
+		if(type == ORDER_TYPE.BUY && tp<sl) {
+			System.err.printf("incorrect %s tp %f sl %f\n"+type.toString(),tp,sl);
+			return false;
+		}
+		if(type == ORDER_TYPE.SELL && tp>sl) {
+			System.err.printf("incorrect %s tp %f sl %f\n"+type.toString(),tp,sl);
 			return false;
 		}
 		Order o = new TPSLOrder(oGens.getNext(), type, volume, currentDate, type==ORDER_TYPE.BUY?currentAsk:currentBid, tp, sl,comment);

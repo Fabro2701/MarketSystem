@@ -12,6 +12,7 @@ import market_system.backtest.data.MarketData;
 import market_system.backtest.stats.BackTestStats;
 import market_system.backtest.stats.PositionStats;
 import market_system.backtest.stats.TradesStats;
+import market_system.backtest.strategy.GrammarBasedStrategy;
 import market_system.backtest.strategy.Strategy;
 import market_system.backtest.strategy.UserStrategy;
 
@@ -55,7 +56,7 @@ public class BackTest {
 			
 			//observers
 			for(BackTestStats s:this.statsObservers) {
-				s.onTick(data.getDate(cursor+i), broker);
+				s.onTick(cursor+i, data.getDate(cursor+i), broker);
 			}
 		}
 		cursor+=n;
@@ -68,7 +69,7 @@ public class BackTest {
 		broker.onEnd();
 		//observers
 		for(BackTestStats s:this.statsObservers) {
-			s.onTick(data.getDate(data.size()-1), broker);
+			s.onTick(data.size(),data.getDate(data.size()-1), broker);
 			s.onEnd(data.getDate(data.size()-1), broker);
 		}
 	}
@@ -102,11 +103,17 @@ public class BackTest {
 		
 		Broker broker = new Broker(new Client(10d));
 		BackTest bt = new BackTest(broker);
-		bt.setData(new MarketData("resources/data/EURUSD-PERIOD_H1.csv"));
+		bt.setData(new MarketData("resources/data/EURUSD-PERIOD_M15_m.csv"));
 		bt.init();
 		
-		Strategy strat = new UserStrategy();
-		bt.step(strat, 1);
+		//Strategy strat = new UserStrategy();
+		GrammarBasedStrategy strat = new GrammarBasedStrategy(
+				"if((Momentum50_1>Macd10_30_2||((((Momentum50_0>1.7&&Momentum200_0>=Momentum10_1)||(Macd100_200_0>=Macd10_30_1||(Macd50_100_2>0.7&&Macd50_100_2<=5.5)))||Macd50_100_2>Macd100_200_0)||(Momentum200_0<=-3.8||Momentum50_1>Momentum50_1)))){res.bull=res.bull+2;}else{res.bear=res.bear+4;}\r\n"
+				+ ""
+				);
+
+		bt.run(strat);
+		/*bt.step(strat, 1);
 		broker.sendFixedTimeOrder(ORDER_TYPE.BUY, 1d, 24*60*5L, null);
 		bt.step(strat, 2);
 		broker.sendFixedTimeOrder(ORDER_TYPE.BUY, 1d, 24*60*5L, null);
@@ -114,8 +121,9 @@ public class BackTest {
 		//broker.sendFixedTimeOrder(ORDER_TYPE.BUY, 1d, 1000000L, null);
 		bt.step(strat, 50);
 		//broker.sendFixedTimeOrder(ORDER_TYPE.BUY, 1d, 1L, null);
-		//bt.step(strat, 2);
+		//bt.step(strat, 2);*/
 		
 		bt.end();
+		System.out.println(broker.getPosition().getMaximumDrawdown());
 	}
 }

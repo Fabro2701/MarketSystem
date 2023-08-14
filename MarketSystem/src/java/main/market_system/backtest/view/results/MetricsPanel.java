@@ -123,6 +123,12 @@ public class MetricsPanel extends javax.swing.JPanel implements ResultsObserver 
 		tradesPanel.add(new JLabel(String.valueOf(stats.getLargestLoss())));
 		tradesPanel.add(new JLabel("Avg loss"));
 		tradesPanel.add(new JLabel(String.valueOf(stats.getAvgLoss())));
+		tradesPanel.add(new JLabel("Drawdonw"));
+		tradesPanel.add(new JLabel(String.format("%,.3f",position.getMaximumDrawdown())));
+		tradesPanel.add(new JLabel("Sharpe ratio"));
+		tradesPanel.add(new JLabel(String.format("%,.3f",stats.getSharpeRatio())));
+		tradesPanel.add(new JLabel("Calmar ratio"));
+		tradesPanel.add(new JLabel(String.format("%,.3f",stats.getCalmarRatio())));
 		this.repaint();
 	}
 }

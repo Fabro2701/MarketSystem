@@ -35,12 +35,12 @@ public class Trade {
 		if(order instanceof TPSLOrder) {
 			TPSLOrder order = (TPSLOrder)this.order;
 			if(order.getType()==ORDER_TYPE.BUY) {
-				if(order.getTp()<=cd.high)return true;
-				if(order.getSl()>=cd.low)return true;
+				if(order.getSl()>=cd.low) {order.r=-1; return true;}
+				if(order.getTp()<=cd.high) {order.r=1; return true;}
 			}
 			else {
-				if(order.getTp()>=cd.low)return true;
-				if(order.getSl()<=cd.high)return true;
+				if(order.getSl()<=cd.high) {order.r=-1; return true;}
+				if(order.getTp()>=cd.low) {order.r=1; return true;}
 			}
 		}
 		return false;

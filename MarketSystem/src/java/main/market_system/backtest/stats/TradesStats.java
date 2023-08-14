@@ -29,7 +29,7 @@ public class TradesStats extends BackTestStats{
 	public void setMetricsPanelObserver(ResultsObserver metricsPanel) {
 		this.metricsPanel = metricsPanel;
 	}
-	public void onTick(LocalDateTime date, Broker broker) {
+	public void onTick(int idx, LocalDateTime date, Broker broker) {
 		List<Trade> otrades = broker.getOpenTrades();
 		List<Deal> deals = broker.getDeals();
 		if(this.tradesPanel!=null)tradesPanel.update(null,null,deals, otrades);
@@ -63,7 +63,7 @@ public class TradesStats extends BackTestStats{
 			double initial = broker.getPosition().getInitialBalance();
 			double max = initial;
 			double acc = 0d;
-			for(Deal deal:deals) er += (deal.getTrade().getType()==ORDER_TYPE.SELL?-1:1)*(deal.getClosePrice()-deal.getOpenPrice())/deal.getOpenPrice();
+			for(Deal deal:deals) er += deal.getProfit()/deal.getOpenPrice();
 			er /= nTrades;
 			for(Deal deal:deals) {
 				profit = deal.getProfit();
@@ -85,7 +85,7 @@ public class TradesStats extends BackTestStats{
 					nshortrades++;
 				}
 				
-				r = (deal.getTrade().getType()==ORDER_TYPE.SELL?-1:1)*(deal.getClosePrice()-deal.getOpenPrice())/deal.getOpenPrice();
+				r = deal.getProfit()/deal.getOpenPrice();
 				or += Math.pow(r - er, 2);
 				acc += r;
 				max = Math.max(max, acc+initial);
@@ -107,7 +107,7 @@ public class TradesStats extends BackTestStats{
 			
 		}
 		
-		if(this.metricsPanel!=null)metricsPanel.update(null,null,deals, null);
+		if(this.metricsPanel!=null)metricsPanel.update(null,broker.getPosition(),deals, null);
 
 	}
 	

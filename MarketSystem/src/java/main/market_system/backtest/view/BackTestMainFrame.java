@@ -20,9 +20,9 @@ public class BackTestMainFrame extends javax.swing.JFrame {
      * Creates new form BackTestMainFrame
      */
     public BackTestMainFrame() {
-        Broker broker = new Broker(new Client(50d));
+        Broker broker = new Broker(new Client(100d));
 	backtest = new BackTest(broker);
-	backtest.setData(new MarketData("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1_r.csv"));
+	backtest.setData(new MarketData("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_M15_m.csv"));
 	backtest.init();
         initComponents();
     }

@@ -13,7 +13,7 @@ import market_system.backtest.view.results.ResultsObserver;
 public class PositionStats extends BackTestStats{
 	DefaultCategoryDataset dataset1,dataset2;
 	JFrame frame;
-	int updateRate=10;
+	int updateRate=24;
 	ResultsObserver balancePanel;
 	public PositionStats() {
 		/*frame = new JFrame();
@@ -52,10 +52,10 @@ public class PositionStats extends BackTestStats{
 		this.balancePanel = balancePanel;
 	}
 	@Override
-	public void onTick(LocalDateTime date, Broker broker) {
+	public void onTick(int idx, LocalDateTime date, Broker broker) {
 		Position position = broker.getPosition();
 		//System.out.println(date+" "+position);
-		if(this.balancePanel!=null)balancePanel.update(date, position, null, null);
+		if(this.balancePanel!=null && idx%this.updateRate==0)balancePanel.update(date, position, null, null);
 
 		/*((DefaultCategoryDataset)dataset1).addValue(position.getEquity(), "equity", date);
 		((DefaultCategoryDataset)dataset1).addValue(position.getBalance(), "balance", date);
@@ -63,7 +63,8 @@ public class PositionStats extends BackTestStats{
 	}
 	@Override
 	public void onEnd(LocalDateTime date, Broker broker) {
-		// TODO Auto-generated method stub
-		
+		Position position = broker.getPosition();
+		if(this.balancePanel!=null)balancePanel.update(date, position, null, null);
+
 	}
 }

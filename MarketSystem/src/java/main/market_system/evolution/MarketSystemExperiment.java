@@ -10,28 +10,23 @@ import java.util.Properties;
 import market_system.backtest.broker.Broker;
 import market_system.backtest.data.MarketData;
 import model.Experiment;
-import model.Util.Pair;
 import model.algorithm.AbstractPipeline;
 import model.algorithm.AbstractSearchAlgorithm;
 import model.algorithm.SimplePipeline;
 import model.grammar.AbstractGrammar;
-import model.module.AdaptiveFitnessModule;
 import model.module.CollectorModule;
 import model.module.CrossoverModule;
 import model.module.FitnessModule;
 import model.module.GrammarModule;
 import model.module.InitializationModule;
+import model.module.InterleavedFitnessModule;
 import model.module.JoinModule;
 import model.module.MutationModule;
 import model.module.SelectionModule;
 import model.module.operator.Operator;
 import model.module.operator.collector.FitnessCollectorOperator;
 import model.module.operator.collector.SimilarityCollectorOperator;
-import model.module.operator.crossover.HomologousCrossoverOperator;
-import model.module.operator.crossover.InheritedCrossoverOperator;
-import model.module.operator.crossover.LHSCrossoverOperator;
-import model.module.operator.crossover.OnePointCrossoverOperator;
-import model.module.operator.crossover.TwoPointCrossoverOperator;
+import model.module.operator.crossover.CrossoverOperator;
 import model.module.operator.fitness.FitnessEvaluationOperator;
 import model.module.operator.grammar.GrammarOperator;
 import model.module.operator.grammar.ModuleGrammarOperator;
@@ -53,7 +48,9 @@ public class MarketSystemExperiment extends Experiment{
 	FitnessCollectorOperator fitnesscollOp;
 	@Override
 	public void setup(Properties properties) {
-		MarketData data = new MarketData("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1_m.csv");
+		MarketData _data = new MarketData("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_M15_m.csv");
+		List<MarketData>tmp = _data.split(0.1,0.8,0.1);
+		MarketData trainingData = tmp.get(1);
 		
 		AbstractPipeline initPipeline = new SimplePipeline();
 		
@@ -65,13 +62,13 @@ public class MarketSystemExperiment extends Experiment{
 		initModule.addOperator(rinitOp);
 		
 		FitnessModule initFitnessModule = new FitnessModule(generalPopulation, properties,rnd);
-		FitnessEvaluationOperator fitnessInitOp = new TradeWinFitnessOperator(properties,rnd,data);
+		FitnessEvaluationOperator fitnessInitOp = new TradeWinFitnessOperator(properties,rnd,trainingData);
 		initFitnessModule.addOperator(fitnessInitOp);
 		
 		CollectorModule fitnesscollModule = new CollectorModule(generalPopulation, properties,rnd);
 		fitnesscollOp = new FitnessCollectorOperator(properties,rnd);
-		fitnesscollOp.addValidationOps(Map.of("v4",new TradeWinFitnessOperator(properties,rnd,"C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1_t1.csv")));
-		fitnesscollOp.addValidationOps(Map.of("v4",new TradeWinFitnessOperator(properties,rnd,"C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1_t2.csv")));
+		fitnesscollOp.addValidationOps(Map.of("t1",new TradeWinFitnessOperator(properties,rnd,tmp.get(0))));
+		fitnesscollOp.addValidationOps(Map.of("t2",new TradeWinFitnessOperator(properties,rnd,tmp.get(2))));
 		fitnesscollModule.addOperator(fitnesscollOp);
 
 		//loop
@@ -89,33 +86,34 @@ public class MarketSystemExperiment extends Experiment{
 		
 		
 		CrossoverModule crossoverModule = new CrossoverModule(selectedPopulation, properties, rnd);
+		CrossoverOperator crossoverOp = this.loadCrossover(properties);
 		//LHSCrossoverOperator crossoverOp = new LHSCrossoverOperator(properties, rnd, grammar);
 		//CrossoverOperator crossoverOp = this.loadCrossover(properties);
-		InheritedCrossoverOperator crossoverOp = new InheritedCrossoverOperator(properties, rnd);
+		/*InheritedCrossoverOperator crossoverOp = new InheritedCrossoverOperator(properties, rnd);
 		crossoverOp.addOperator(new HomologousCrossoverOperator(properties, rnd))
 				   .addOperator(new LHSCrossoverOperator(properties, rnd, grammar))
 				   .addOperator(new OnePointCrossoverOperator(properties, rnd))
-				   .addOperator(new TwoPointCrossoverOperator(properties, rnd));
+				   .addOperator(new TwoPointCrossoverOperator(properties, rnd));*/
 		crossoverModule.addOperator(crossoverOp);
 		
 		MutationModule mutationModule = new MutationModule(selectedPopulation, properties, rnd);
 		MutationOperator mutationOp = this.loadMutation(properties);
 		mutationModule.addOperator(mutationOp);
 		
-		//FitnessModule fitnessModule = new FitnessModule(selectedPopulation, properties,rnd);//selectedPopulation beacuse generalpop are already evaluated
+		FitnessModule fitnessModule = new FitnessModule(selectedPopulation, properties, rnd);//selectedPopulation beacuse generalpop are already evaluated
 		//TradeWinFitnessOperator fitnessOp = new TradeWinFitnessOperator(properties,rnd,"C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1.csv");
-		//fitnessModule.addOperator(fitnessOp);
+		fitnessModule.addOperator(fitnessInitOp);
 		
 		/*InterleavedFitnessModule fitnessModule = new InterleavedFitnessModule(generalPopulation, properties,rnd);
-		List<MarketData> ds = data.split(Integer.parseInt(properties.getProperty("interleaved_split", "10")));
+		List<MarketData> ds = trainingData.split(Integer.parseInt(properties.getProperty("interleaved_split", "10")));
 		for(var d:ds)fitnessModule.addOperator(new TradeWinFitnessOperator(properties,rnd,d));*/
 		
-		AdaptiveFitnessModule fitnessModule = new AdaptiveFitnessModule(generalPopulation, properties,rnd);
+		/*AdaptiveFitnessModule fitnessModule = new AdaptiveFitnessModule(generalPopulation, properties,rnd);
 		Pair<MarketData,MarketData> dp = data.split(Double.parseDouble(properties.getProperty("adaptive_init", "0.3")));
 		fitnessModule.setInitOp(new TradeWinFitnessOperator(properties,rnd,dp.first));
 		List<MarketData> ds = dp.second.split(Integer.parseInt(properties.getProperty("adaptive_split", "10")));
 		for(var d:ds)fitnessModule.addOperator(new TradeWinFitnessOperator(properties,rnd,d));
-		
+		*/
 		
 		JoinModule joinModule = new JoinModule(generalPopulation, properties, rnd, selectedPopulation);
 		JoinOperator joinOp = this.loadJoin(properties);
@@ -141,7 +139,7 @@ public class MarketSystemExperiment extends Experiment{
 		loopPipeline.addModule(joinModule);
 		loopPipeline.addModule(fitnesscollModule);
 		loopPipeline.addModule(simicollModule);
-		loopPipeline.addModule(moduleGrammarModule);
+		//loopPipeline.addModule(moduleGrammarModule);
 		
 		this.algorithm.setInitPipeline(initPipeline);
 		this.algorithm.setLoopPipeline(loopPipeline);

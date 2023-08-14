@@ -22,11 +22,11 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
     BackTest backtest;
     SeriesPlayerController ctrl;
     boolean simStop;
-    Strategy strategy = new UserStrategy();
-	/*GrammarBasedStrategy strategy = new GrammarBasedStrategy(
-			"if((Momentum50<=-3.3&&Momentum10>=Momentum10)){res.bull=res.bull+3;}else{res.bull=0;}\r\n"
+    //Strategy strategy = new UserStrategy();
+	GrammarBasedStrategy strategy = new GrammarBasedStrategy(
+			"if((Momentum50_0<=Momentum50_1||Momentum200_0>Macd50_100_2)){res.bear=res.bear+2;}if((Momentum10_0>=Momentum50_2&&(((Macd100_200_2>=Macd100_200_2&&Momentum10_1>=1.6)||Macd50_100_0>Macd100_200_0)||Momentum200_1>=Momentum200_2))){res.bull=res.bull+6;}if(Macd50_100_1<2.3){res.bear=res.bear+2;}else{res.bull=0;}\r\n"
 			+ ""
-			);*/
+			);
 
     /**
      * Creates new form SeriesVisualizer

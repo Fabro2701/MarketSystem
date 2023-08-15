@@ -8,7 +8,7 @@ public class DataProxy {
 		String indicator = id.substring(0, p);
 		int w = Integer.valueOf(id.substring(p+1));
 		
-		return data.indicators.get(indicator).get(cursor>=w?cursor-w:cursor);
+		return data.getIndicator(indicator, cursor>=w?cursor-w:cursor);
 	}
 	public void setData(MarketData data) {
 		this.data = data;

@@ -17,11 +17,11 @@ public class LineChartRenderer extends PricesRenderer{
 	@Override
 	public void update(Graphics2D g2, MarketData data, int cursor, double max, double min) {
 
-    	int lastclose = (int) (Util.map(data.get(cursor).close,max,min)*SeriesViewerPanel.height);
-		double lastask = Util.map(data.get(cursor).ask,max,min)*SeriesViewerPanel.height;
-		double lastbid = Util.map(data.get(cursor).bid,max,min)*SeriesViewerPanel.height;
+    	int lastclose = (int) (Util.map(data.getCandle(cursor).close,max,min)*SeriesViewerPanel.height);
+		double lastask = Util.map(data.getCandle(cursor).ask,max,min)*SeriesViewerPanel.height;
+		double lastbid = Util.map(data.getCandle(cursor).bid,max,min)*SeriesViewerPanel.height;
     	for(int i=cursor+1;i-cursor<RenderConstants.windowSize && i<data.size();i++) {
-    		CandleData cd=data.get(i);
+    		CandleData cd=data.getCandle(i);
     		double close = Util.map(cd.close,max,min)*SeriesViewerPanel.height;
     		double ask = Util.map(cd.ask,max,min)*SeriesViewerPanel.height;
     		double bid = Util.map(cd.bid,max,min)*SeriesViewerPanel.height;

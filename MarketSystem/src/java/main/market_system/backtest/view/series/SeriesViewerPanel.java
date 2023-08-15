@@ -72,10 +72,10 @@ public class SeriesViewerPanel extends javax.swing.JPanel {
 					   (int)width, (int)(i*50));
 		}
 		
-		double max=data.get(ini).low,min=data.get(ini).high;
+		double max=data.getCandle(ini).low,min=data.getCandle(ini).high;
     	for(int i=ini;i-ini<RenderConstants.windowSize && i<data.size();i++) {
-    		max=Math.max(max, data.get(i).high);
-    		min=Math.min(min, data.get(i).low);
+    		max=Math.max(max, data.getCandle(i).high);
+    		min=Math.min(min, data.getCandle(i).low);
     	}
     	
 		//prices

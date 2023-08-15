@@ -53,8 +53,8 @@ public class BackTest {
 			//data.fillIndicators(indicatorsMap, cursor+i);
 			this.dataProxy.setCursor(i+cursor);
 			
-			broker.onTick(i+cursor, data.getDate(cursor+i), data.get(cursor+i));
-			strategy.onTick(i+cursor, data.getDate(cursor+i), data.get(cursor+i), dataProxy, broker);
+			broker.onTick(i+cursor, data.getDate(cursor+i), data.getCandle(cursor+i));
+			strategy.onTick(i+cursor, data.getDate(cursor+i), data.getCandle(cursor+i), dataProxy, broker);
 			
 			//observers
 			for(BackTestStats s:this.statsObservers) {

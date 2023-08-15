@@ -20,24 +20,21 @@ import java.util.Properties;
 import model.Util.Pair;
 
 
-public class MarketData extends ArrayList<CandleData>{
-	Map<String,ArrayList<Double>>indicators;
-	ArrayList<LocalDateTime>dates;
-	
+public class MarketData {
+	private CandleData candles[];
+	private Map<String,double []>indicators;
+	private LocalDateTime dates[];
+	private int size;
 	private MarketData() {
-		super();
-		indicators = new HashMap<>();
-		dates = new ArrayList<>();
+		
 	}
 	public MarketData(String filename) {
 		this(filename, defaultProperties);
 	}
 	public MarketData(String filename, Properties props) {
-		super(Integer.valueOf(props.getProperty("capacity")));
 		Objects.requireNonNull(filename, "null data filename");
 		
-		indicators = new HashMap<>();
-		dates = new ArrayList<>(Integer.valueOf(props.getProperty("capacity")));
+		
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(props.getProperty("date_format"));
 		
@@ -48,17 +45,22 @@ public class MarketData extends ArrayList<CandleData>{
 		
 		int candleIndices = 7;
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_16))) {
-		    String line;
+		    int n = Integer.valueOf(br.readLine());
+		    size = n;
+		    indicators = new HashMap<>();
+			dates = new LocalDateTime[n];
+			candles = new CandleData[n];
+			String line;
 		    String header[] = br.readLine().split(delimiter);
 		    int inds=header.length-candleIndices;
-		    for(int i=0;i<inds;i++)this.indicators.put(header[i+candleIndices], new ArrayList<>());
+		    for(int i=0;i<inds;i++)this.indicators.put(header[i+candleIndices], new double[n]);
 		    
+		    int idx=0;
 		    while ((line = br.readLine()) != null) {
 		    	values = line.split(delimiter);
 		    	
 		    	//LocalDateTime date = LocalDateTime.parse(values[0].contains(":")?values[0]:values[0]+" 00:00:00", formatter);
-		    	LocalDateTime date = LocalDateTime.parse(values[0], formatter);
-		    	dates.add(date);
+		    	dates[idx] = LocalDateTime.parse(values[0], formatter);
 		    	
 		    	CandleData cd = new CandleData(Double.parseDouble(values[1]), 
 		    								   Double.parseDouble(values[2]), 
@@ -66,14 +68,15 @@ public class MarketData extends ArrayList<CandleData>{
 		    								   Double.parseDouble(values[4]), 
 		    								   Double.parseDouble(values[5]), 
 		    								   Double.parseDouble(values[6]));
-		    	this.add(cd);
+		    	candles[idx] = cd;
 		    	
 		    	for(int i=0;i<inds;i++) {
-		    		this.indicators.get(header[candleIndices+i]).add(Double.parseDouble(values[candleIndices+i]));
+		    		this.indicators.get(header[candleIndices+i])[idx] = Double.parseDouble(values[candleIndices+i]);
 		    	}
+		    	idx++;
 		    }
 		    
-		    System.out.println("File "+file.getName()+" read -"+this.size()+"- "+Arrays.toString(header));
+		    System.out.println("File "+file.getName()+" read -"+n+"- "+Arrays.toString(header));
 		} catch (IOException e) {
 			System.err.println("Error reading data from: "+filename);
 			e.printStackTrace();
@@ -97,9 +100,9 @@ public class MarketData extends ArrayList<CandleData>{
 	 */
 	public void fillIndicators(Map<String, Double>map, int i) {
 		int windowSize = 3;
-		for(Entry<String, ArrayList<Double>> e:this.indicators.entrySet()) {
+		for(Entry<String, double[]> e:this.indicators.entrySet()) {
 			for(int j=0;j<windowSize;j++) {
-				map.put(e.getKey()+"_"+j, e.getValue().get(i-(i>=j?j:0)));
+				map.put(e.getKey()+"_"+j, e.getValue()[i-(i>=j?j:0)]);
 			}
 		}
 	}
@@ -118,21 +121,42 @@ public class MarketData extends ArrayList<CandleData>{
 		for(int i=0;i<p.length;i++) {
 			int m = (int) (this.size()*p[i]);
 			MarketData d = new MarketData();
-			for(int j=0;j<m&&j+cursor<this.size();j++) {
-				d.add(this.get(j+cursor));
-				d.dates.add(this.dates.get(j+cursor));
-				for(String k:this.indicators.keySet()) {
-					d.indicators.computeIfAbsent(k, a->new ArrayList<>()).add(this.indicators.get(k).get(j+cursor));
-				}
-				cursor++;
-			}	
+			d.dates = Arrays.copyOfRange(this.dates, cursor, cursor+m);
+			d.candles = Arrays.copyOfRange(this.candles, cursor, cursor+m);
+			d.indicators = new HashMap<>();
+			for(String k:this.indicators.keySet()) {
+				d.indicators.put(k, Arrays.copyOfRange(this.indicators.get(k), cursor, cursor+m));
+			}
+			cursor += m;
+			d.size = m;
 			ds.add(d);
 		}
 		
 		return ds;
 	}
 	public LocalDateTime getDate(int i) {
-		return this.dates.get(i);
+		return this.dates[i];
+	}
+	public CandleData getCandle(int i) {
+		return this.candles[i];
+	}
+	public double[] getIndicator(String k) {
+		return this.indicators.get(k);
+	}
+	public double getIndicator(String k, int i) {
+		return this.indicators.get(k)[i];
+	}
+	public int size() {
+		return this.size;
+	}
+	public CandleData[] getCandles() {
+		return candles;
+	}
+	public Map<String, double[]> getIndicators() {
+		return indicators;
+	}
+	public LocalDateTime[] getDates() {
+		return dates;
 	}
 	
 	

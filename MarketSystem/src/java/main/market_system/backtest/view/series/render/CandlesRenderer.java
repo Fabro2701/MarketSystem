@@ -19,7 +19,7 @@ public class CandlesRenderer extends PricesRenderer{
     	
     	g2.setStroke(new BasicStroke(1));
     	for(int i=cursor;i-cursor<RenderConstants.windowSize && i<data.size();i++) {
-    		CandleData cd=data.get(i);
+    		CandleData cd=data.getCandle(i);
     		double open = Util.map(cd.open,max,min)*SeriesViewerPanel.height;
     		double close = Util.map(cd.close,max,min)*SeriesViewerPanel.height;
     		double high = Util.map(cd.high,max,min)*SeriesViewerPanel.height;

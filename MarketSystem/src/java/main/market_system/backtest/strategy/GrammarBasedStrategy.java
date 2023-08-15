@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import market_system.backtest.broker.Broker;
 import market_system.backtest.broker.order.Order.ORDER_TYPE;
 import market_system.backtest.data.CandleData;
+import market_system.backtest.data.DataProxy;
 import market_system.evaluation.ActionEvaluator;
 import market_system.evaluation.EvaluationException;
 import market_system.evaluation.OOPParser;
@@ -19,30 +20,42 @@ public class GrammarBasedStrategy extends Strategy {
 	ActionEvaluator eval;
 	Map<String, Object>map;
 	Result res;
+	volatile static Map<String, JSONObject>cache = new HashMap<>();
+	
 	public GrammarBasedStrategy(String code) {
-		this.code = new OOPParser().parse(code);
+		if(cache.containsKey(code)) this.code = cache.get(code);
+		else {
+			if(cache.size()>5000)cache.clear();
+			this.code = new OOPParser().parse(code);
+			cache.put(code, this.code);
+		}
+		
 		this.map = new HashMap<>();
 		eval = new ActionEvaluator(this.code.getJSONArray("code"));
 		res = new Result();
 	}
 	public class Result{
 		public double bull,bear;
+		public double atr;
 		public Result() {
 			bull=0d;
 			bear=0d;
+			atr=0d;
 		}
 		public void reset() {
 			bull=0d;
 			bear=0d;
+			atr=0d;
 		}
 	}
 	@Override
-	public void onTick(int idx, LocalDateTime date, CandleData candleData, Map<String, Double> indicators, Broker broker) {
+	public void onTick(int idx, LocalDateTime date, CandleData candleData, DataProxy dataProxy, Broker broker) {
 		map.clear();
-		map.putAll(indicators);
-		map.put("cd", candleData);
+		//map.putAll(indicators);
+		//map.put("cd", candleData);
+		map.put("proxy", dataProxy);
 		map.put("res", res);
-		double atr = indicators.get("atr_0");
+		double atr = dataProxy.getValue("atr_0");
 		this.resultStrat(broker,atr,idx, date, candleData);
 		//this.valueStrat(broker);
 		
@@ -61,6 +74,8 @@ public class GrammarBasedStrategy extends Strategy {
 	}
 	private void resultStrat(Broker broker, double atr, int idx, LocalDateTime date, CandleData cd) {
 		//res.reset();
+		res.bear *= 0.9;
+		res.bull *= 0.9;
 		try {
 			eval.evaluate(map);
 		} catch (IllegalArgumentException | JSONException | EvaluationException e) {
@@ -71,15 +86,24 @@ public class GrammarBasedStrategy extends Strategy {
 		if(res.bull>threshold)r++;
 		if(res.bear>threshold)r--;
 		long duration=20L;
-		double multAtr = 4d;
+		//double multAtr = 4d;
+		double multAtr = res.atr;
 		if(r>0) {
 			broker.closeTrades(ORDER_TYPE.SELL);
-			broker.sendTPSLOrder(ORDER_TYPE.BUY, Math.min(res.bull/100d,0.5), cd.ask+atr*3.0, cd.ask-atr*3.0, null);
+			broker.sendTPSLOrder(ORDER_TYPE.BUY, Math.min(res.bull/100d,0.5), cd.ask+atr*multAtr, cd.ask-atr*multAtr, null);
 		}
 		if(r<0) {
 			broker.closeTrades(ORDER_TYPE.BUY);
-			broker.sendTPSLOrder(ORDER_TYPE.SELL, Math.min(res.bear/100d,0.5), cd.bid-atr*3.0, cd.bid+atr*3.0, null);
+			broker.sendTPSLOrder(ORDER_TYPE.SELL, Math.min(res.bear/100d,0.5), cd.bid-atr*multAtr, cd.bid+atr*multAtr, null);
 		}
+		/*if(r>0) {
+			broker.closeTrades(ORDER_TYPE.SELL);
+			broker.sendTPSLOrder(ORDER_TYPE.BUY, Math.min(res.bull/100d,0.5), cd.ask+atr*multAtr*2d, cd.ask-atr*multAtr/2d, null);
+		}
+		if(r<0) {
+			broker.closeTrades(ORDER_TYPE.BUY);
+			broker.sendTPSLOrder(ORDER_TYPE.SELL, Math.min(res.bear/100d,0.5), cd.bid-atr*multAtr*2d, cd.bid+atr*multAtr/2d, null);
+		}*/
 	}
 
 }

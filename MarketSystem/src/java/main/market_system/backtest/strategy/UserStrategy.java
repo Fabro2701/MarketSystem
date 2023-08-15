@@ -6,13 +6,14 @@ import java.util.Map;
 import market_system.backtest.broker.Broker;
 import market_system.backtest.broker.order.Order.ORDER_TYPE;
 import market_system.backtest.data.CandleData;
+import market_system.backtest.data.DataProxy;
 
 public class UserStrategy extends Strategy {
 
 	@Override
-	public void onTick(int idx, LocalDateTime date, CandleData cd, Map<String, Double> indicators, Broker broker) {
+	public void onTick(int idx, LocalDateTime date, CandleData cd, DataProxy dataProxy, Broker broker) {
 		if(idx==4) {
-			double atr = indicators.get("atr_0");
+			double atr = dataProxy.getValue("atr_0");
 			broker.sendTPSLOrder(ORDER_TYPE.BUY, 0.1d, cd.ask+atr*3.0, cd.ask-atr*3.0, String.valueOf(atr));
 		}
 		/*if(idx==10) {

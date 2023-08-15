@@ -20,6 +20,7 @@ public class TradesStats extends BackTestStats{
 	double avgProfit,avgLoss;
 	double sharpeRatio,calmarRatio;
 	double mdd;
+	double er,or;
 	public TradesStats() {
 		
 	}
@@ -59,7 +60,8 @@ public class TradesStats extends BackTestStats{
 			double shortTradesWin=0,longTradesWin=0;
 			double profit;
 			double r = 0d;
-			double er = 0d, or = 0d;
+			er = 0d;
+			or = 0d;
 			double initial = broker.getPosition().getInitialBalance();
 			double max = initial;
 			double acc = 0d;
@@ -138,6 +140,12 @@ public class TradesStats extends BackTestStats{
 	}
 	public double getCalmarRatio() {
 		return calmarRatio;
+	}
+	public double getETrades() {
+		return er;
+	}
+	public double getOTrades() {
+		return or;
 	}
 	public double getMaximumDrawdown() {
 		return mdd;

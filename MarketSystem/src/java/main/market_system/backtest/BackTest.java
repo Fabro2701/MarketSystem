@@ -7,14 +7,13 @@ import java.util.Objects;
 
 import market_system.backtest.broker.Broker;
 import market_system.backtest.broker.Client;
-import market_system.backtest.broker.order.Order.ORDER_TYPE;
+import market_system.backtest.data.DataProxy;
 import market_system.backtest.data.MarketData;
 import market_system.backtest.stats.BackTestStats;
 import market_system.backtest.stats.PositionStats;
 import market_system.backtest.stats.TradesStats;
 import market_system.backtest.strategy.GrammarBasedStrategy;
 import market_system.backtest.strategy.Strategy;
-import market_system.backtest.strategy.UserStrategy;
 
 public class BackTest {
 	private int cursor;
@@ -23,12 +22,14 @@ public class BackTest {
 	private Map<String,Double>indicatorsMap;
 	private List<BackTestStats>statsObservers;
         private boolean done;
+        DataProxy dataProxy;
 	
 	public BackTest(Broker broker,List<BackTestStats>obs) {
 		this.cursor = 0;
 		this.broker = broker;
 		this.indicatorsMap = new HashMap<>();
 		statsObservers = obs;
+		dataProxy = new DataProxy();
 	}
 	public BackTest(Broker broker) {
 		this(broker,List.of(new PositionStats(), new TradesStats()));
@@ -48,11 +49,12 @@ public class BackTest {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}*/
-			indicatorsMap.clear();
-			data.fillIndicators(indicatorsMap, cursor+i);
+			//indicatorsMap.clear();
+			//data.fillIndicators(indicatorsMap, cursor+i);
+			this.dataProxy.setCursor(i+cursor);
 			
-			broker.onTick(i+cursor, data.getDate(cursor+i), data.get(cursor+i), indicatorsMap);
-			strategy.onTick(i+cursor, data.getDate(cursor+i), data.get(cursor+i), indicatorsMap, broker);
+			broker.onTick(i+cursor, data.getDate(cursor+i), data.get(cursor+i));
+			strategy.onTick(i+cursor, data.getDate(cursor+i), data.get(cursor+i), dataProxy, broker);
 			
 			//observers
 			for(BackTestStats s:this.statsObservers) {
@@ -77,6 +79,7 @@ public class BackTest {
 	public void setData(MarketData data, int c) {
 		this.data = data;
 		this.cursor = c;
+		this.dataProxy.setData(data);
 	}
 	public void setData(MarketData data) {
 		this.setData(data, 0);
@@ -108,7 +111,7 @@ public class BackTest {
 		
 		//Strategy strat = new UserStrategy();
 		GrammarBasedStrategy strat = new GrammarBasedStrategy(
-				"if((Momentum50_1>Macd10_30_2||((((Momentum50_0>1.7&&Momentum200_0>=Momentum10_1)||(Macd100_200_0>=Macd10_30_1||(Macd50_100_2>0.7&&Macd50_100_2<=5.5)))||Macd50_100_2>Macd100_200_0)||(Momentum200_0<=-3.8||Momentum50_1>Momentum50_1)))){res.bull=res.bull+2;}else{res.bear=res.bear+4;}\r\n"
+				"if(Bulls_power_1>=3.2){res.bear=res.bear+9;}else{res.bull=res.bull+6;}if(Macd50_100_2<-4.9){res.bull=0;}else{res.bear=res.bear+6;}res.atr=9;"
 				+ ""
 				);
 

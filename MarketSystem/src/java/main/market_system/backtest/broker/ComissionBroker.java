@@ -19,11 +19,7 @@ public class ComissionBroker extends Broker {
 
 	}
 
-	@Override
-	public void onTick(int idx, LocalDateTime date, CandleData candleData, Map<String, Double> indicatorsMap) {
-		// TODO Auto-generated method stub
 
-	}
 
 	@Override
 	public void onEnd() {

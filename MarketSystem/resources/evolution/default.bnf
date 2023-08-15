@@ -1,4 +1,5 @@
-<S> -> <IF><S>|<IF>.
+<S> -> <CODE>'res.atr='<NP>';'.
+<CODE> -> <IF><CODE>|<IF>.
 <IF> -> if(<COND>'){'<RES>';}'|if(<COND>'){'<RES>';}else{'<RES>';}'.
 <COND> -> <OBS> <OP> <VALUE> | <OBS> <OP> <OBS> |'(' <COND> <OP_RELA> <COND>')'.
 <OP> -> '<'|'>'|'<='|'>='.
@@ -6,10 +7,15 @@
 <VALUE> -> '-'<V>'.'<N>|<V>'.'<N>.
 <V> -> 0|1|2|3|4|5.
 <RES> -> <RES_BULL>|<RES_BEAR>|'res.bull=0'|'res.bear=0'.
-<RES_BULL> -> 'res.bull=res.bull+'<N>.
-<RES_BEAR> -> 'res.bear=res.bear+'<N>.
+<RES_BULL> -> 'res.bull=res.bull+'<NP>.
+<RES_BEAR> -> 'res.bear=res.bear+'<NP>.
+<NP> -> 1|2|3|4|5|6|7|8|9.
 <N> -> 0|1|2|3|4|5|6|7|8|9.
-<OBS> -> <MOM_OBS>'_'<W>|<MACD_OBS>'_'<W>.
+<OBS> -> 'proxy.getValue("'<OBS_T>'")'.
+<OBS_T> -> <MOM_OBS>'_'<W>|<MACD_OBS>'_'<W>|<BANDS_OBS>'_'<W>|<POWER_OBS>'_'<W>|<RSI_OBS>'_'<W>.
 <MOM_OBS> ->'Momentum10'|'Momentum50'|'Momentum200'.
 <MACD_OBS> -> 'Macd10_30'|'Macd50_100'|'Macd100_200'.
+<BANDS_OBS> -> 'Upper_band'|'Lower_band'.
+<POWER_OBS> -> 'Bulls_power'|'Bears_power'.
+<RSI_OBS> -> 'RSI'.
 <W> -> 0|1|2.

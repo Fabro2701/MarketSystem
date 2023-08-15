@@ -88,7 +88,6 @@ public class MarketSystemExperiment extends Experiment{
 		CrossoverModule crossoverModule = new CrossoverModule(selectedPopulation, properties, rnd);
 		CrossoverOperator crossoverOp = this.loadCrossover(properties);
 		//LHSCrossoverOperator crossoverOp = new LHSCrossoverOperator(properties, rnd, grammar);
-		//CrossoverOperator crossoverOp = this.loadCrossover(properties);
 		/*InheritedCrossoverOperator crossoverOp = new InheritedCrossoverOperator(properties, rnd);
 		crossoverOp.addOperator(new HomologousCrossoverOperator(properties, rnd))
 				   .addOperator(new LHSCrossoverOperator(properties, rnd, grammar))
@@ -101,7 +100,6 @@ public class MarketSystemExperiment extends Experiment{
 		mutationModule.addOperator(mutationOp);
 		
 		FitnessModule fitnessModule = new FitnessModule(selectedPopulation, properties, rnd);//selectedPopulation beacuse generalpop are already evaluated
-		//TradeWinFitnessOperator fitnessOp = new TradeWinFitnessOperator(properties,rnd,"C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_H1.csv");
 		fitnessModule.addOperator(fitnessInitOp);
 		
 		/*InterleavedFitnessModule fitnessModule = new InterleavedFitnessModule(generalPopulation, properties,rnd);
@@ -138,7 +136,7 @@ public class MarketSystemExperiment extends Experiment{
 		loopPipeline.addModule(fitnessModule);
 		loopPipeline.addModule(joinModule);
 		loopPipeline.addModule(fitnesscollModule);
-		loopPipeline.addModule(simicollModule);
+		//loopPipeline.addModule(simicollModule);
 		//loopPipeline.addModule(moduleGrammarModule);
 		
 		this.algorithm.setInitPipeline(initPipeline);

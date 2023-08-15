@@ -41,7 +41,7 @@ public class Broker {
 	public void onInit() {
 		
 	}
-	public void onTick(int idx, LocalDateTime date, CandleData candle, Map<String, Double> indicatorsMap) {
+	public void onTick(int idx, LocalDateTime date, CandleData candle) {
 		//if(idx%50==0)System.out.println("Time: "+date+"  |  "+position);
 		//System.out.println("Time: "+date+"  |  "+position);
 		

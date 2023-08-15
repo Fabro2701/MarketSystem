@@ -18,7 +18,7 @@ import model.module.operator.fitness.FitnessEvaluationOperator;
 
 public class TradeWinFitnessOperator extends FitnessEvaluationOperator {
 	MarketData data;
-	HashMap<String, Double>cache;
+	volatile HashMap<String, Double>cache;
 	boolean cacheable = true;
 	public TradeWinFitnessOperator(Properties properties, Random rnd, String dataPath) {
 		super(properties, rnd);
@@ -62,7 +62,10 @@ public class TradeWinFitnessOperator extends FitnessEvaluationOperator {
 		//r *= broker.getPosition().getBalance();
 		//r *= ss.getSharpeRatio();
 		//r *= ss.getCalmarRatio();
-		r *= position.getBalance() / (position.getMaximumDrawdown()+1);
+		//r *= position.getBalance() / (position.getMaximumDrawdown()+1);
+		r *= 100.0*ss.getETrades() / (position.getMaximumDrawdown()+1);
+		r *= position.getEquity() / position.getInitialBalance();
+		if(ss.getETrades()<0d)r=0;
 		broker.clear();
 		//System.out.println(r);
 		//if(ss.getnTrades()<100)r=0;

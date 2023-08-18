@@ -105,7 +105,7 @@ public class MarketSystemExperiment extends Experiment{
 		/*InterleavedFitnessModule fitnessModule = new InterleavedFitnessModule(generalPopulation, properties,rnd);
 		List<MarketData> ds = trainingData.split(Integer.parseInt(properties.getProperty("interleaved_split", "10")));
 		for(var d:ds)fitnessModule.addOperator(new TradeWinFitnessOperator(properties,rnd,d));*/
-		
+	
 		/*AdaptiveFitnessModule fitnessModule = new AdaptiveFitnessModule(generalPopulation, properties,rnd);
 		Pair<MarketData,MarketData> dp = data.split(Double.parseDouble(properties.getProperty("adaptive_init", "0.3")));
 		fitnessModule.setInitOp(new TradeWinFitnessOperator(properties,rnd,dp.first));

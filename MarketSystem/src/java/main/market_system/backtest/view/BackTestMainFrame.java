@@ -4,6 +4,10 @@
  */
 package market_system.backtest.view;
 
+import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import market_system.backtest.BackTest;
 import market_system.backtest.broker.Broker;
 import market_system.backtest.broker.Client;
@@ -25,6 +29,13 @@ public class BackTestMainFrame extends javax.swing.JFrame {
 	backtest.setData(new MarketData("C:\\Users\\Fabrizio Ortega\\git\\MarketSystem\\MarketSystem\\resources\\data\\EURUSD-PERIOD_M15_m.csv"));
 	backtest.init();
         initComponents();
+        
+        JTable table = backTestResultPanel2.tradesPanel1.getTable();
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent event) {
+            	seriesVisualizerPanel1.getCtrl().setCursor((Integer)table.getValueAt(table.getSelectedRow(), 1));
+            }
+        });
     }
 
     /**

@@ -20,7 +20,7 @@ import market_system.backtest.broker.Trade;
 public class TradesTableModel extends DefaultTableModel{
     int cursor;
     public TradesTableModel(){
-        super(new Vector(), new Vector<String>(List.of("Date","Id","Type","Price","Volume", "Close Date", "Close Price","Profit","Comment")));
+        super(new Vector(), new Vector<String>(List.of("Date","DateIdx","Id","Type","Price","Volume", "Close Date", "Close Price","Profit","Comment")));
         this.cursor=0;
     }
 
@@ -32,7 +32,7 @@ public class TradesTableModel extends DefaultTableModel{
         boolean b = false;
         for(int i=cursor;i<deals.size();i++){
             Deal d=deals.get(i);
-            this.dataVector.add(new Vector(List.of(d.getOpenTime(),d.getId(), d.getTrade().getType(),d.getOpenPrice(), d.getVolume(), d.getCloseTime(), d.getClosePrice(), d.getProfit(), "")));
+            this.dataVector.add(new Vector(List.of(d.getOpenTime(),d.getIniIdx(),d.getId(), d.getTrade().getType(),d.getOpenPrice(), d.getVolume(), d.getCloseTime(), d.getClosePrice(), d.getProfit(), "")));
             cursor++;
             b=true;
             //this.fireTableStructureChanged();

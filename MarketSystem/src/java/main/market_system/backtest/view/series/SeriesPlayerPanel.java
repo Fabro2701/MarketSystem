@@ -24,7 +24,7 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
     boolean simStop;
     //Strategy strategy = new UserStrategy();
 	GrammarBasedStrategy strategy = new GrammarBasedStrategy(
-			"if(((proxy.getValue(\"Momentum50_2\")>-5.9||proxy.getValue(\"Bulls_power_2\")>=-5.7)||proxy.getValue(\"RSI_0\")>proxy.getValue(\"RSI_0\"))){res.bull=0;}else{res.bull=res.bull+9;}if(proxy.getValue(\"Bulls_power_1\")>proxy.getValue(\"Momentum50_2\")){res.bull=res.bull+4;}else{res.bull=res.bull+8;}res.atr=6;\r\n"
+			"if((proxy.getValue(\"Bulls_power_0\")>5.7&&proxy.getValue(\"Momentum50_10\")>=proxy.getValue(\"Momentum10_1\"))){res.bull=res.bull+9;}if(proxy.getValue(\"Bears_power_3\")<=0.2){res.bull=res.bull+9;}res.atr=7;\r\n"
 			+ ""
 			);
 
@@ -461,7 +461,11 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
         seriesViewerPanel.repaint();
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    public SeriesPlayerController getCtrl() {
+		return ctrl;
+	}
+
+	// Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton candleButton;
     private javax.swing.JTextField cursorField;
     private javax.swing.JTextField dateField;

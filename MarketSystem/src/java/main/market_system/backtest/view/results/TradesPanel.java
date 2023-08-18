@@ -8,11 +8,12 @@ import java.awt.Color;
 import java.awt.Component;
 import java.time.LocalDateTime;
 import java.util.List;
+
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
+
 import market_system.backtest.BackTest;
 import market_system.backtest.broker.Deal;
 import market_system.backtest.broker.Position;
@@ -40,7 +41,7 @@ public class TradesPanel extends javax.swing.JPanel implements ResultsObserver {
         }
         tableModel = new TradesTableModel();
         table = new JTable(tableModel);
-        table.getColumnModel().getColumn(7).setCellRenderer(new ColorCellRenderer());
+        table.getColumnModel().getColumn(8).setCellRenderer(new ColorCellRenderer());
         //table.setMaximumSize(new java.awt.Dimension(2174, 263));
         //table.setMinimumSize(new java.awt.Dimension(2174, 263));
         //table.setPreferredSize(new java.awt.Dimension(2174, 263));
@@ -49,6 +50,8 @@ public class TradesPanel extends javax.swing.JPanel implements ResultsObserver {
         //table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         initComponents();
         table.setFillsViewportHeight(true);
+        
+        
        
     }
     private static class ColorCellRenderer extends DefaultTableCellRenderer {
@@ -105,5 +108,8 @@ public class TradesPanel extends javax.swing.JPanel implements ResultsObserver {
 		if(this.tableModel.update(deals,otrades)){
             this.repaint();
         }
+	}
+	public JTable getTable() {
+		return table;
 	}
 }

@@ -34,7 +34,7 @@ public class BackTestResultPanel extends javax.swing.JPanel {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
         balancePanel1 = new market_system.backtest.view.results.BalancePanel(backtest);
-        market_system.backtest.view.results.TradesPanel tradesPanel1 = new market_system.backtest.view.results.TradesPanel(backtest);
+        tradesPanel1 = new market_system.backtest.view.results.TradesPanel(backtest);
         jScrollPane1 = new javax.swing.JScrollPane();
         metricsPanel2 = new market_system.backtest.view.results.MetricsPanel(backtest);
 
@@ -69,6 +69,7 @@ public class BackTestResultPanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    protected market_system.backtest.view.results.TradesPanel tradesPanel1;
     private market_system.backtest.view.results.BalancePanel balancePanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;

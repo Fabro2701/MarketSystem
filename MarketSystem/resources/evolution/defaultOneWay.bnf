@@ -1,14 +1,14 @@
 <S> -> <CODE>'res.atr='<NP>';'.
 <CODE> -> <IF><CODE>|<IF>.
 <IF> -> if(<COND>'){'<RES>';}'|if(<COND>'){'<RES>';}else{'<RES>';}'.
-<COND> -> <OBS> <OP> <VALUE> | <OBS> <OP> <OBS> |'(' <COND> <OP_RELA> <COND>')'.
+<COND> -> <OBS> <OP> <VALUE> | <OBS> <OP> <OBS> |'(' <COND_P> <OP_RELA> <COND_P>')'.
+<COND_P> -> <OBS> <OP> <VALUE> | <OBS> <OP> <OBS>.
 <OP> -> '<'|'>'|'<='|'>='.
 <OP_RELA> -> '&&'|'||'.
 <VALUE> -> '-'<V>'.'<N>|<V>'.'<N>.
 <V> -> 0|1|2|3|4|5.
-<RES> -> <RES_BULL>|<RES_BEAR>|'res.bull=0'|'res.bear=0'.
+<RES> -> <RES_BULL>|'res.bull=0'.
 <RES_BULL> -> 'res.bull=res.bull'<SIGN><NP>.
-<RES_BEAR> -> 'res.bear=res.bear'<SIGN><NP>.
 <NP> -> 1|2|3|4|5|6|7|8|9.
 <SIGN> -> '+'|'-'.
 <N> -> 0|1|2|3|4|5|6|7|8|9.
@@ -19,4 +19,4 @@
 <BANDS_OBS> -> 'Upper_band'|'Lower_band'.
 <POWER_OBS> -> 'Bulls_power'|'Bears_power'.
 <RSI_OBS> -> 'RSI'.
-<W> -> 0|1|2.
+<W> -> 0|1|2|3|5|7|10.

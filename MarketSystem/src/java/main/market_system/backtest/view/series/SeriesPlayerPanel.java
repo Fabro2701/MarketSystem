@@ -24,7 +24,7 @@ public class SeriesPlayerPanel extends javax.swing.JPanel {
     boolean simStop;
     //Strategy strategy = new UserStrategy();
 	GrammarBasedStrategy strategy = new GrammarBasedStrategy(
-			"if((proxy.getValue(\"Bulls_power_0\")>5.7&&proxy.getValue(\"Momentum50_10\")>=proxy.getValue(\"Momentum10_1\"))){res.bull=res.bull+9;}if(proxy.getValue(\"Bears_power_3\")<=0.2){res.bull=res.bull+9;}res.atr=7;\r\n"
+			"if(proxy.getValue(\"Macd100_200_1\")>4.2){res.bear=res.bear+6;}else{res.bear=0;}if(proxy.getValue(\"Bulls_power_0\")<=-5.9){res.bear=0;}res.atr=9;\r\n"
 			+ ""
 			);
 

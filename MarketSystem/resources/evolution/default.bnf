@@ -19,4 +19,4 @@
 <BANDS_OBS> -> 'Upper_band'|'Lower_band'.
 <POWER_OBS> -> 'Bulls_power'|'Bears_power'.
 <RSI_OBS> -> 'RSI'.
-<W> -> 0|1|2.
+<W> -> 0|1|2|3|5|7|10.

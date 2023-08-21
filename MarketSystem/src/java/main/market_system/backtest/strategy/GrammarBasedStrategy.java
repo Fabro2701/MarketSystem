@@ -56,8 +56,9 @@ public class GrammarBasedStrategy extends Strategy {
 		map.put("proxy", dataProxy);
 		map.put("res", res);
 		double atr = dataProxy.getValue("atr_0");
-		this.oneWayResultStrat(broker,atr,idx, date, candleData);
 		//this.valueStrat(broker);
+		this.resultStrat(broker,atr,idx, date, candleData);
+		//this.oneWayResultStrat(broker,atr,idx, date, candleData);
 		
 	}
 	private void valueStrat(Broker broker, double atr, CandleData candleData) {
@@ -86,8 +87,8 @@ public class GrammarBasedStrategy extends Strategy {
 		if(res.bull>threshold)r++;
 		if(res.bear>threshold)r--;
 		long duration=20L;
-		//double multAtr = 4d;
-		double multAtr = res.atr;
+		double multAtr = 4d;
+		//double multAtr = res.atr;
 		if(r>0) {
 			broker.closeTrades(ORDER_TYPE.SELL);
 			broker.sendTPSLOrder(ORDER_TYPE.BUY, Math.min(res.bull/100d,0.5), cd.ask+atr*multAtr, cd.ask-atr*multAtr, null);

@@ -19,7 +19,6 @@ import model.module.CrossoverModule;
 import model.module.FitnessModule;
 import model.module.GrammarModule;
 import model.module.InitializationModule;
-import model.module.InterleavedFitnessModule;
 import model.module.JoinModule;
 import model.module.MutationModule;
 import model.module.SelectionModule;
@@ -33,7 +32,13 @@ import model.module.operator.grammar.ModuleGrammarOperator;
 import model.module.operator.initialization.InitializationOperator;
 import model.module.operator.join.JoinOperator;
 import model.module.operator.mutation.MutationOperator;
+import model.module.operator.selection.CombinedSelectionOperator;
+import model.module.operator.selection.EliteSelectionOperator;
+import model.module.operator.selection.LinearRankSelectionOperator;
+import model.module.operator.selection.RouletteSelectionOperator;
 import model.module.operator.selection.SelectionOperator;
+import model.module.operator.selection.StochasticUniversalSamplingSelectionOperator;
+import model.module.operator.selection.TournamentSelectionOperator;
 import view.GrammaticalEvolutionMainFrame;
 
 
@@ -137,7 +142,7 @@ public class MarketSystemExperiment extends Experiment{
 		loopPipeline.addModule(joinModule);
 		loopPipeline.addModule(fitnesscollModule);
 		//loopPipeline.addModule(simicollModule);
-		//loopPipeline.addModule(moduleGrammarModule);
+		loopPipeline.addModule(moduleGrammarModule);
 		
 		this.algorithm.setInitPipeline(initPipeline);
 		this.algorithm.setLoopPipeline(loopPipeline);

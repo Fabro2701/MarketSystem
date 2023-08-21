@@ -64,8 +64,8 @@ public class TradeWinFitnessOperator extends FitnessEvaluationOperator {
 		//r *= ss.getCalmarRatio();
 		//r *= position.getBalance() / (position.getMaximumDrawdown()+1);
 		r *= 100.0*ss.getETrades() / (position.getMaximumDrawdown()+1);
-		r *= position.getEquity() / position.getInitialBalance();
-		if(ss.getETrades()<0d)r=0;
+		//r *= position.getEquity() / position.getInitialBalance();
+		//if(ss.getETrades()<0d)r=0;
 		broker.clear();
 		//System.out.println(r);
 		//if(ss.getnTrades()<100)r=0;
